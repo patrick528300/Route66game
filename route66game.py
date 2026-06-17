@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import sys
 import random
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import pygame
@@ -67,6 +67,7 @@ class Vehicle:
     gas_cans: int = 0
     coffee: int = 0
     collectibles: int = 0
+    collectible_origins: list[int] = field(default_factory=list)
     ticket_due: bool = False
     skip_turns: int = 0
     skip_reason: str = ""
@@ -96,9 +97,19 @@ CITY_CODES = {
 }
 
 RIVER_CROSSINGS = {
-    7: "East St Louis",
-    53: "Needles",
+    7: "East St Louis - Mississippi River Crossing",
+    53: "Needles - Colorado River Crossing",
 }
+
+STATE_RANGES = [
+    (1, 7, "Illinois"),
+    (8, 17, "Missouri"),
+    (18, 24, "Oklahoma"),
+    (25, 34, "Texas"),
+    (35, 44, "New Mexico"),
+    (45, 53, "Arizona"),
+    (54, 66, "California"),
+]
 
 SERVICE_COSTS = {
     "fill_fuel": 5,
@@ -175,12 +186,20 @@ class Route66Board:
         self.ai = Route66AI()
         self.ai_next_action_at = 0
         self.CITY_STOPS = CITY_STOPS
+        self.RIVER_CROSSINGS = RIVER_CROSSINGS
         self.CELL_COUNT = CELL_COUNT
+        self.setup_new_game()
+
+    def setup_new_game(self) -> None:
+        self.game_state = "select"
+        self.human_vehicle = None
+        self.ai = Route66AI()
+        self.ai_next_action_at = 0
         self.vehicles = [
-            Vehicle("Sedan", speed=1, max_move=6, fuel_tank=5, fuel=5, fuel_cons=1, color=(48, 98, 160)),
-            Vehicle("RV", speed=1, max_move=5, fuel_tank=20, fuel=20, fuel_cons=4, capacity=4, color=(128, 92, 166)),
-            Vehicle("Pickup", speed=1, max_move=6, fuel_tank=15, fuel=15, fuel_cons=3, capacity=5, color=(203, 112, 48)),
-            Vehicle("Sports Car", speed=2, max_move=10, fuel_tank=5, fuel=5, fuel_cons=2, capacity=2, color=(194, 54, 70)),
+            Vehicle("Sedan", speed=1, max_move=6, fuel_tank=5, fuel=5, fuel_cons=1, tires=1, gas_cans=1, color=(48, 98, 160)),
+            Vehicle("RV", speed=1, max_move=5, fuel_tank=20, fuel=20, fuel_cons=4, capacity=4, tires=1, gas_cans=1, color=(128, 92, 166)),
+            Vehicle("Pickup", speed=1, max_move=6, fuel_tank=15, fuel=15, fuel_cons=3, capacity=5, tires=1, gas_cans=1, color=(203, 112, 48)),
+            Vehicle("Sports Car", speed=2, max_move=10, fuel_tank=5, fuel=5, fuel_cons=2, capacity=2, tires=1, gas_cans=1, color=(194, 54, 70)),
         ]
         self.vehicles[0].capacity = 3
         self.current_vehicle = 0
@@ -193,6 +212,7 @@ class Route66Board:
         self.service_buttons: list[tuple[pygame.Rect, str]] = []
         self.emergency_button: tuple[pygame.Rect, str] | None = None
         self.history_button: pygame.Rect | None = None
+        self.new_game_button: pygame.Rect | None = None
         self.turn_service_used = False
         self.transactions: list[str] = []
         self.show_history = False
@@ -225,6 +245,8 @@ class Route66Board:
     def price_at(self, position: int, action: str) -> int:
         if action == "fill_fuel":
             return self.fuel_price_at(position)
+        if action == "gas_can":
+            return self.fuel_price_at(position) * 2 + 5
         base = SERVICE_COSTS[action]
         modifier = self.price_modifiers.get(position, 1.0)
         return max(1, round(base * modifier))
@@ -313,6 +335,10 @@ class Route66Board:
         panel = self.panel_rect()
         return pygame.Rect(panel.x + 132, panel.bottom - 58, 86, 38)
 
+    def new_game_button_rect(self) -> pygame.Rect:
+        panel = self.panel_rect()
+        return pygame.Rect(panel.x + 18, panel.bottom - 104, panel.width - 36, 34)
+
     def popup_ok_rect(self) -> pygame.Rect:
         width, height = self.screen.get_size()
         return pygame.Rect(width // 2 - 44, height // 2 + 104, 88, 36)
@@ -337,8 +363,25 @@ class Route66Board:
     def is_human_turn(self) -> bool:
         return self.human_vehicle == self.current_vehicle
 
+    def is_ai_car(self, car: Vehicle) -> bool:
+        if self.human_vehicle is None:
+            return False
+        return any(vehicle is car and index != self.human_vehicle for index, vehicle in enumerate(self.vehicles))
+
+    def reward_ai_state(self, car: Vehicle, reward: float, reason: str) -> None:
+        if not self.is_ai_car(car):
+            return
+        self.ai.remember(self, car, reward)
+        self.add_transaction(f"AI value {reward:+.0f} for {car.name}: {reason}.")
+
     def rankings(self) -> list[tuple[int, Vehicle]]:
         return sorted(enumerate(self.vehicles), key=lambda item: (-item[1].position, item[0]))
+
+    def rank_for_car(self, target: Vehicle) -> int:
+        for rank, (_, car) in enumerate(self.rankings(), start=1):
+            if car is target:
+                return rank
+        return len(self.vehicles)
 
     def current_car(self) -> Vehicle:
         return self.vehicles[self.current_vehicle]
@@ -358,8 +401,8 @@ class Route66Board:
         if car.skip_turns > 0:
             reason = car.skip_reason or "Waiting"
             return f"{reason}. Skip this turn."
-        if car.money < 0 and car.position in CITY_STOPS and car.position != CELL_COUNT:
-            return "Debt in big city. Work until money is non-negative."
+        if car.money <= 0 and car.position in CITY_STOPS and car.position != CELL_COUNT:
+            return "Debt in big city. Work until money is above $0."
         if car.ticket_due:
             return "Ticket unpaid. Pay $100 before moving."
         if car.fuel < car.fuel_cons:
@@ -418,8 +461,8 @@ class Route66Board:
         self.move_options = {
             position for position in range(low, high + 1)
             if self.can_move_without_passing_river(start, position)
+            and self.can_move_without_passing_debt_city(car, start, position)
         }
-        self.move_options.discard(start)
 
     def can_move_without_passing_river(self, start: int, destination: int) -> bool:
         if destination == start:
@@ -429,6 +472,15 @@ class Route66Board:
             return not crossings or destination == crossings[0]
         crossings = sorted((pos for pos in RIVER_CROSSINGS if destination <= pos < start), reverse=True)
         return not crossings or destination == crossings[0]
+
+    def can_move_without_passing_debt_city(self, car: Vehicle, start: int, destination: int) -> bool:
+        if car.money >= 0 or destination == start:
+            return True
+        if destination > start:
+            cities = sorted(pos for pos in CITY_STOPS if start < pos <= destination and pos != CELL_COUNT)
+            return not cities or destination == cities[0]
+        cities = sorted((pos for pos in CITY_STOPS if destination <= pos < start and pos != CELL_COUNT), reverse=True)
+        return not cities or destination == cities[0]
 
     def finish_move(self, destination: int) -> None:
         car = self.current_car()
@@ -447,7 +499,19 @@ class Route66Board:
         self.message = f"{car.name} reached {city}." if city else f"{car.name} reached block {car.position}."
         self.add_transaction(f"{car.name} moved from {start} to {destination}, spent {car.fuel_cons} fuel.")
         if distance > 4:
-            self.resolve_long_move_event(car, distance)
+            event_result = self.resolve_long_move_event(car, distance)
+            if event_result == "none":
+                self.reward_ai_state(car, +10, "moved 5+ blocks without penalty")
+            else:
+                self.reward_ai_state(car, -10, "moved 5+ blocks with penalty")
+        elif distance > 0:
+            self.reward_ai_state(car, +5, "moved 1-4 blocks")
+        if car.position in CITY_STOPS and car.position != start:
+            rank = self.rank_for_car(car)
+            reward = 15 + (5 - rank)
+            self.reward_ai_state(car, reward, f"entered {CITY_STOPS[car.position]} at rank {rank}")
+        if car.position != CELL_COUNT:
+            self.maybe_show_state_entry(car, start, car.position)
         if car.position == CELL_COUNT and self.winner is None:
             self.winner = car.name
             self.add_transaction(f"{car.name} reached Santa Monica and won the game.")
@@ -467,19 +531,24 @@ class Route66Board:
     def charge_forced_cost(self, car: Vehicle, cost: int, reason: str) -> None:
         car.money -= cost
         self.add_transaction(f"{car.name} paid ${cost} for {reason}.")
+        if car.money < 0:
+            self.reward_ai_state(car, -10, "money below zero")
 
-    def resolve_long_move_event(self, car: Vehicle, distance: int) -> None:
+    def resolve_long_move_event(self, car: Vehicle, distance: int) -> str:
         event_roll = random.randint(1, 3)
         if event_roll == 1:
             car.ticket_due = True
             self.message = f"{car.name} got a $100 ticket."
             self.add_transaction(f"{car.name} moved {distance} blocks and got a $100 ticket.")
+            self.reward_ai_state(car, -10, "ticket")
             self.open_popup("Ticket", [f"{car.name} moved {distance} blocks.", "Police issued a $100 ticket.", "Pay it before this car can move again."])
+            return "penalty"
         elif event_roll == 2:
             if car.tires > 0:
                 car.tires -= 1
                 self.message = f"{car.name} blew a tire and used a spare."
                 self.add_transaction(f"{car.name} moved {distance} blocks, blew a tire, and used 1 spare.")
+                self.reward_ai_state(car, +10, "spare tire prevented tow")
                 self.open_popup("Tire Blowout", [f"{car.name} moved {distance} blocks.", "A tire blew out.", "Used 1 spare tire."])
             else:
                 destination = self.nearest_service_stop(car.position, "mechanic")
@@ -489,8 +558,10 @@ class Route66Board:
                 self.message = f"{car.name} blew a tire and was towed to {city}."
                 self.add_transaction(f"{car.name} had no spare tire and was towed to {city}.")
                 self.open_popup("Tire Blowout", [f"{car.name} moved {distance} blocks.", "No spare tire available.", f"Towed to {city} for $70."])
+            return "penalty"
         else:
             self.add_transaction(f"{car.name} moved {distance} blocks; no long-distance event.")
+            return "none"
 
     def nearest_service_city(self, position: int) -> int:
         service_stops = [stop for stop in CITY_STOPS if stop != CELL_COUNT]
@@ -501,6 +572,20 @@ class Route66Board:
         service_stops.extend(stop for stop, kind in self.service_points.items() if kind == service_kind)
         return min(service_stops, key=lambda stop: (abs(stop - position), stop))
 
+    def preferred_service_stop(self, position: int, service_kind: str) -> int:
+        service_stops = sorted([stop for stop in CITY_STOPS if stop != CELL_COUNT])
+        service_stops.extend(stop for stop, kind in self.service_points.items() if kind == service_kind)
+        service_stops = sorted(set(service_stops))
+        previous_stops = [stop for stop in service_stops if stop < position]
+        if previous_stops:
+            previous = previous_stops[-1]
+            if position - previous < 3:
+                return previous
+        future_stops = [stop for stop in service_stops if stop > position]
+        if future_stops:
+            return future_stops[0]
+        return previous_stops[-1] if previous_stops else position
+
     def stop_name(self, position: int) -> str:
         if position in CITY_STOPS:
             return CITY_STOPS[position]
@@ -508,12 +593,46 @@ class Route66Board:
             return RIVER_CROSSINGS[position]
         return SERVICE_POINT_LABELS[self.service_points[position]]
 
+    def state_for_position(self, position: int) -> str:
+        for start, end, state in STATE_RANGES:
+            if start <= position <= end:
+                return state
+        return "Route 66"
+
+    def maybe_show_state_entry(self, car: Vehicle, start: int, destination: int) -> None:
+        if self.human_vehicle is None or self.vehicles[self.human_vehicle] is not car:
+            return
+        old_state = self.state_for_position(start)
+        new_state = self.state_for_position(destination)
+        if old_state == new_state:
+            return
+        self.add_transaction(f"{car.name} entered {new_state}.")
+        self.open_popup("Entering State", [f"Entering {new_state}", "Route 66 continues west."])
+
     def spend_money(self, car: Vehicle, cost: int) -> bool:
         car.money -= cost
+        if car.money < 0:
+            self.reward_ai_state(car, -10, "money below zero")
         return True
 
     def cargo_used(self, car: Vehicle) -> int:
         return car.tires + car.arms + car.gas_cans + car.coffee + car.collectibles
+
+    def collectible_sell_value(self, origin: int, position: int) -> int:
+        distance = abs(position - origin)
+        return SERVICE_COSTS["collectible"] + distance * 3
+
+    def best_collectible_sale(self, car: Vehicle) -> tuple[int, int] | None:
+        if car.collectibles <= 0:
+            return None
+        while len(car.collectible_origins) < car.collectibles:
+            car.collectible_origins.append(1)
+        best_index = max(
+            range(len(car.collectible_origins)),
+            key=lambda index: self.collectible_sell_value(car.collectible_origins[index], car.position),
+        )
+        origin = car.collectible_origins[best_index]
+        return best_index, self.collectible_sell_value(origin, car.position)
 
     def has_cargo_space(self, car: Vehicle) -> bool:
         if self.cargo_used(car) >= car.capacity:
@@ -528,9 +647,9 @@ class Route66Board:
         if not self.service_available(car.position, action):
             self.message = "This service is not available here."
             return
-        debt_locked = car.money < 0 and car.position in CITY_STOPS and car.position != CELL_COUNT
-        if debt_locked and action not in {"work_one", "work_two", "work_three"}:
-            self.message = "Debt rule: work in this city until money is non-negative."
+        debt_locked = car.money <= 0 and car.position in CITY_STOPS and car.position != CELL_COUNT
+        if debt_locked and action not in {"work_one", "work_two", "work_three", "sell_collectible"}:
+            self.message = "Debt rule: work in this city until money is above $0."
             return
         turn_service = action in {"motel", "work_one", "work_two", "work_three", "capacity", "fuel_tank", "speed"}
         if turn_service and self.turn_service_used and not (debt_locked and action in {"work_one", "work_two", "work_three"}):
@@ -562,12 +681,14 @@ class Route66Board:
                 car.tires += 1
                 self.message = f"Bought 1 tire for ${cost}."
                 self.add_transaction(f"{car.name} bought 1 tire for ${cost}.")
+                self.reward_ai_state(car, +5, "bought tire")
         elif action == "gas_can":
             cost = self.price_at(car.position, action)
             if self.has_cargo_space(car) and self.spend_money(car, cost):
                 car.gas_cans += 1
                 self.message = f"Bought 1 gas can for ${cost}."
                 self.add_transaction(f"{car.name} bought 1 gas can for ${cost}.")
+                self.reward_ai_state(car, +5, "bought gas can")
         elif action == "coffee":
             cost = self.price_at(car.position, action)
             if self.has_cargo_space(car) and self.spend_money(car, cost):
@@ -584,9 +705,24 @@ class Route66Board:
             cost = self.price_at(car.position, action)
             if self.has_cargo_space(car) and self.spend_money(car, cost):
                 car.collectibles += 1
+                car.collectible_origins.append(car.position)
                 self.message = f"Bought 1 collectible for ${cost}."
                 self.add_transaction(f"{car.name} bought 1 collectible for ${cost}.")
+        elif action == "sell_collectible":
+            sale = self.best_collectible_sale(car)
+            if sale is None:
+                self.message = "No collectible to sell."
+                return
+            index, value = sale
+            origin = car.collectible_origins.pop(index)
+            car.collectibles -= 1
+            car.money += value
+            self.message = f"Sold 1 collectible for ${value}."
+            self.add_transaction(
+                f"{car.name} sold 1 collectible bought at block {origin} for ${value}."
+            )
         elif action == "work_one":
+            was_in_debt = car.money < 0
             car.money += 40
             car.skip_turns = 1
             car.skip_reason = "working 1 turn"
@@ -594,7 +730,10 @@ class Route66Board:
             self.turn_service_used = True
             self.message = "Work started. Earned $40 and must skip 1 turn."
             self.add_transaction(f"{car.name} worked 1 turn, earned $40, and must skip 1 turn.")
+            if was_in_debt:
+                self.reward_ai_state(car, +20, "stopped and worked while in debt")
         elif action == "work_two":
+            was_in_debt = car.money < 0
             car.money += 100
             car.skip_turns = 2
             car.skip_reason = "working 2 turns"
@@ -602,7 +741,10 @@ class Route66Board:
             self.turn_service_used = True
             self.message = "Work started. Earned $100 and must skip 2 turns."
             self.add_transaction(f"{car.name} worked 2 turns, earned $100, and must skip 2 turns.")
+            if was_in_debt:
+                self.reward_ai_state(car, +20, "stopped and worked while in debt")
         elif action == "work_three":
+            was_in_debt = car.money < 0
             car.money += 150
             car.skip_turns = 3
             car.skip_reason = "working 3 turns"
@@ -610,6 +752,8 @@ class Route66Board:
             self.turn_service_used = True
             self.message = "Work started. Earned $150 and must skip 3 turns."
             self.add_transaction(f"{car.name} worked 3 turns, earned $150, and must skip 3 turns.")
+            if was_in_debt:
+                self.reward_ai_state(car, +20, "stopped and worked while in debt")
         elif action == "capacity":
             cost = self.price_at(car.position, action)
             if self.spend_money(car, cost):
@@ -671,7 +815,7 @@ class Route66Board:
             return
         if not self.spend_money(car, SERVICE_COSTS["tow"]):
             return
-        destination = self.nearest_service_stop(car.position, "gas")
+        destination = self.preferred_service_stop(car.position, "gas")
         car.position = destination
         self.turn_done = True
         self.turn_service_used = True
@@ -690,6 +834,7 @@ class Route66Board:
         car.fuel = min(car.fuel_tank, car.fuel + 2)
         self.message = "Used 1 gas can. Fuel +2."
         self.add_transaction(f"{car.name} used 1 gas can and restored 2 fuel.")
+        self.reward_ai_state(car, +10, "gas can prevented tow")
 
     def sleep_current_car(self) -> None:
         if self.move_options or self.turn_done:
@@ -1022,8 +1167,9 @@ class Route66Board:
         self.draw_emergency_button()
         self.draw_history_button()
         self.draw_go_button()
+        self.draw_new_game_button()
 
-        y = panel.bottom - 112
+        y = panel.bottom - 152
         draw_text_left(self.screen, self.panel_font, "Controls", (x, y), TEXT)
         y += 28
         draw_text_left(self.screen, self.small, "Go: roll and show range", (x, y), MUTED)
@@ -1065,7 +1211,7 @@ class Route66Board:
                     ("Speed +1", "speed"),
                 ],
             ),
-            ("Shop", [("Arm", "arm"), ("Collectible", "collectible")]),
+            ("Shop", [("Arm", "arm"), ("Buy coll", "collectible"), ("Sell coll", "sell_collectible")]),
             ("Work", [("1T +$40", "work_one"), ("2T +$100", "work_two"), ("3T +$150", "work_three")]),
         ]
 
@@ -1111,6 +1257,9 @@ class Route66Board:
     def service_button_label(self, position: int, label: str, action: str) -> str:
         if action == "fill_fuel":
             return f"Fuel ${self.price_at(position, action)}"
+        if action == "sell_collectible":
+            sale = self.best_collectible_sale(self.current_car())
+            return f"Sell ${sale[1]}" if sale else "Sell"
         if action in {"work_one", "work_two", "work_three"}:
             return label
         return f"{label} ${self.price_at(position, action)}"
@@ -1148,6 +1297,7 @@ class Route66Board:
                 (f"Use {car.fuel_cons}", MUTED),
                 (f"Energy {car.energy}", ERROR if car.energy < 2 else MUTED),
                 (f"Money ${car.money}", ERROR if car.money < 50 else MUTED),
+                (f"Value {self.ai.values.get(self.ai.state_key(self, car), 0.0):+.1f}", MUTED),
             ],
         )
         self.draw_stat_box(
@@ -1223,6 +1373,12 @@ class Route66Board:
         pygame.draw.rect(self.screen, BUTTON_ALT, rect, border_radius=7)
         draw_text(self.screen, self.small, "History", rect.center, WHITE)
 
+    def draw_new_game_button(self) -> None:
+        rect = self.new_game_button_rect()
+        self.new_game_button = rect
+        pygame.draw.rect(self.screen, BUTTON_ALT, rect, border_radius=7)
+        draw_text(self.screen, self.panel_font, "New Game", rect.center, WHITE)
+
     def draw_go_button(self) -> None:
         rect = self.go_button_rect()
         car = self.current_car()
@@ -1287,6 +1443,8 @@ class Route66Board:
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+                    if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
+                        self.setup_new_game()
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                         for idx, rect in enumerate(self.selection_card_rects()):
                             if rect.collidepoint(event.pos):
@@ -1326,6 +1484,9 @@ class Route66Board:
                         if self.winner:
                             self.export_history()
                         self.show_history = True
+                        continue
+                    if self.new_game_button and self.new_game_button.collidepoint(event.pos):
+                        self.setup_new_game()
                         continue
                     if self.emergency_button and self.emergency_button[0].collidepoint(event.pos):
                         if self.emergency_button[1] == "tow":
