@@ -1,0 +1,208 @@
+R1 Human chose Sports Car. Other cars are AI.
+R1 Sedan bought 1 tire for $17.
+R1 Sedan rolled 4; move range is 4.
+R1 Sedan moved from 1 to 5, spent 1 fuel.
+R1 RV bought 1 tire for $17.
+R1 RV rolled 3; move range is 3.
+R1 RV moved from 1 to 4, spent 4 fuel.
+R1 Pickup bought 1 tire for $17.
+R1 Pickup rolled 3; move range is 3.
+R1 Pickup moved from 1 to 4, spent 3 fuel.
+R1 Sports Car rolled 1; move range is 2.
+R1 Sports Car moved from 1 to 3, spent 2 fuel.
+R2 Sedan rolled 6; move range is 6.
+R2 Sedan moved from 5 to 7, spent 1 fuel.
+R2 RV rolled 2; move range is 2.
+R2 RV moved from 4 to 6, spent 4 fuel.
+R2 Pickup rolled 1; move range is 1.
+R2 Pickup moved from 4 to 5, spent 3 fuel.
+R2 Sports Car rolled 1; move range is 2.
+R2 Sports Car moved from 3 to 5, spent 2 fuel.
+R3 Sedan rolled 6; move range is 6.
+R3 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
+R3 RV rolled 2; move range is 2.
+R3 RV moved from 6 to 7, spent 4 fuel.
+R3 Pickup rolled 3; move range is 3.
+R3 Pickup moved from 5 to 7, spent 3 fuel.
+R3 Sports Car was towed to Gas Station for $70.
+R3 Sports Car filled fuel for $16 ($4/fuel).
+R3 Sports Car bought 1 coffee for $10.
+R4 Sedan rolled 4; move range is 4.
+R4 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
+R4 RV rolled 3; move range is 3.
+R4 RV moved from 7 to 10, spent 4 fuel.
+R4 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R4 Sports Car rolled 3; move range is 6.
+R4 Sports Car moved from 4 to 7, spent 2 fuel.
+R5 Sedan rolled 2; move range is 2.
+R5 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
+R5 RV rolled 5; move range is 5.
+R5 RV moved from 10 to 15, spent 4 fuel.
+R5 RV moved 5 blocks and got a $100 ticket.
+R5 Pickup skipped a turn: sleeping on the road.
+R5 Sports Car consumed 1 coffee and restored 1 energy.
+R5 Sports Car rolled 1; move range is 2.
+R5 Sports Car moved from 7 to 8, spent 2 fuel.
+R6 Sedan rolled 3; move range is 3.
+R6 Sedan moved from 7 to 10, spent 1 fuel.
+R6 RV paid a $100 ticket.
+R6 RV was towed to Gas Station for $70.
+R6 Pickup rolled 2; move range is 2.
+R6 Pickup rolled even at East St Louis; stayed with fuel and energy frozen.
+R6 Sports Car filled fuel for $16 ($4/fuel).
+R6 Sports Car stayed at motel for $34.
+R7 Sedan slept on the road; energy restored by 1 and must skip next turn.
+R7 RV was towed to Gas Station for $70.
+R7 Pickup rolled 1; move range is 1.
+R7 Pickup moved from 7 to 8, spent 3 fuel.
+R7 Sports Car rolled 4; move range is 8.
+R7 Sports Car moved from 8 to 16, spent 2 fuel.
+R7 Sports Car moved 8 blocks and got a $100 ticket.
+R8 Sedan skipped a turn: sleeping on the road.
+R8 RV was towed to Gas Station for $70.
+R8 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R8 Sports Car paid a $100 ticket.
+R8 Sports Car rolled 1; move range is 2.
+R8 Sports Car moved from 16 to 18, spent 2 fuel.
+R9 Sedan rolled 6; move range is 6.
+R9 Sedan moved from 10 to 16, spent 1 fuel.
+R9 Sedan moved 6 blocks; no long-distance event.
+R9 RV was towed to Gas Station for $70.
+R9 Pickup skipped a turn: sleeping on the road.
+R9 Sports Car filled fuel for $12 ($3/fuel).
+R9 Sports Car stayed at motel for $34.
+R10 Sedan slept on the road; energy restored by 1 and must skip next turn.
+R10 RV was towed to Gas Station for $70.
+R10 Pickup filled fuel for $48 ($4/fuel).
+R10 Pickup stayed at motel for $34.
+R10 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
+R11 Sedan skipped a turn: sleeping on the road.
+R11 RV was towed to Gas Station for $70.
+R11 Pickup rolled 1; move range is 1.
+R11 Pickup moved from 8 to 9, spent 3 fuel.
+R11 Sports Car skipped a turn: working 2 turns.
+R12 Sedan rolled 1; move range is 1.
+R12 Sedan moved from 16 to 17, spent 1 fuel.
+R12 RV was towed to Gas Station for $70.
+R12 Pickup rolled 2; move range is 2.
+R12 Pickup moved from 9 to 11, spent 3 fuel.
+R12 Sports Car skipped a turn: working 2 turns.
+R13 Sedan was towed to Gas Station for $70.
+R13 RV was towed to Gas Station for $70.
+R13 Pickup rolled 4; move range is 4.
+R13 Pickup moved from 11 to 15, spent 3 fuel.
+R13 Sports Car rolled 3; move range is 6.
+R13 Sports Car moved from 18 to 24, spent 2 fuel.
+R13 Sports Car paid $70 for towing after tire blowout.
+R13 Sports Car had no spare tire and was towed to Amarillo.
+R14 Sedan was towed to Gas Station for $70.
+R14 RV was towed to Gas Station for $70.
+R14 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R14 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
+R15 Sedan was towed to Gas Station for $70.
+R15 RV was towed to Gas Station for $70.
+R15 Pickup skipped a turn: sleeping on the road.
+R15 Sports Car skipped a turn: working 2 turns.
+R16 Sedan was towed to Gas Station for $70.
+R16 RV was towed to Gas Station for $70.
+R16 Pickup rolled 2; move range is 2.
+R16 Pickup moved from 15 to 17, spent 3 fuel.
+R16 Sports Car skipped a turn: working 2 turns.
+R17 Sedan was towed to Gas Station for $70.
+R17 RV was towed to Gas Station for $70.
+R17 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R17 Sports Car rolled 5; move range is 10.
+R17 Sports Car moved from 25 to 35, spent 2 fuel.
+R17 Sports Car moved 10 blocks and got a $100 ticket.
+R18 Sedan was towed to Gas Station for $70.
+R18 RV was towed to Gas Station for $70.
+R18 Pickup skipped a turn: sleeping on the road.
+R18 Sports Car paid a $100 ticket.
+R18 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
+R19 Sedan was towed to Gas Station for $70.
+R19 RV was towed to Gas Station for $70.
+R19 Pickup filled fuel for $48 ($4/fuel).
+R19 Pickup rolled 2; move range is 2.
+R19 Pickup moved from 17 to 19, spent 3 fuel.
+R19 Sports Car skipped a turn: working 2 turns.
+R20 Sedan was towed to Gas Station for $70.
+R20 RV was towed to Gas Station for $70.
+R20 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R20 Sports Car skipped a turn: working 2 turns.
+R21 Sedan was towed to Gas Station for $70.
+R21 RV was towed to Gas Station for $70.
+R21 Pickup skipped a turn: sleeping on the road.
+R21 Sports Car filled fuel for $12 ($3/fuel).
+R21 Sports Car bought 1 gas can for $16.
+R21 Sports Car bought 1 tire for $21.
+R21 Sports Car rolled 4; move range is 8.
+R21 Sports Car moved from 35 to 43, spent 2 fuel.
+R21 Sports Car moved 8 blocks and got a $100 ticket.
+R22 Sedan was towed to Gas Station for $70.
+R22 RV was towed to Gas Station for $70.
+R22 Pickup rolled 5; move range is 5.
+R22 Pickup moved from 19 to 24, spent 3 fuel.
+R22 Pickup moved 5 blocks; no long-distance event.
+R22 Sports Car paid a $100 ticket.
+R22 Sports Car slept on the road; energy restored by 1 and must skip next turn.
+R23 Sedan was towed to Gas Station for $70.
+R23 RV was towed to Gas Station for $70.
+R23 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R23 Sports Car skipped a turn: sleeping on the road.
+R24 Sedan was towed to Gas Station for $70.
+R24 RV was towed to Gas Station for $70.
+R24 Pickup skipped a turn: sleeping on the road.
+R24 Sports Car rolled 3; move range is 6.
+R24 Sports Car moved from 43 to 45, spent 2 fuel.
+R24 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
+R25 Sedan was towed to Gas Station for $70.
+R25 RV was towed to Gas Station for $70.
+R25 Pickup rolled 4; move range is 4.
+R25 Pickup moved from 24 to 28, spent 3 fuel.
+R25 Sports Car skipped a turn: working 2 turns.
+R26 Sedan was towed to Gas Station for $70.
+R26 RV was towed to Gas Station for $70.
+R26 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R26 Sports Car skipped a turn: working 2 turns.
+R27 Sedan was towed to Gas Station for $70.
+R27 RV was towed to Gas Station for $70.
+R27 Pickup skipped a turn: sleeping on the road.
+R27 Sports Car stayed at motel for $26.
+R27 Sports Car filled fuel for $16 ($4/fuel).
+R28 Sedan was towed to Gas Station for $70.
+R28 RV was towed to Gas Station for $70.
+R28 Pickup rolled 2; move range is 2.
+R28 Pickup moved from 28 to 30, spent 3 fuel.
+R28 Sports Car rolled 2; move range is 4.
+R28 Sports Car moved from 45 to 49, spent 2 fuel.
+R29 Sedan was towed to Gas Station for $70.
+R29 RV was towed to Gas Station for $70.
+R29 Pickup slept on the road; energy restored by 1 and must skip next turn.
+R29 Sports Car rolled 4; move range is 8.
+R29 Sports Car moved from 49 to 53, spent 2 fuel.
+R30 Sedan was towed to Gas Station for $70.
+R30 RV was towed to Gas Station for $70.
+R30 Pickup skipped a turn: sleeping on the road.
+R30 Sports Car used 1 gas can and restored 2 fuel.
+R30 Sports Car rolled 3; move range is 6.
+R30 Sports Car moved from 53 to 55, spent 2 fuel.
+R30 Sports Car stayed at motel for $29.
+R30 Sports Car filled fuel for $16 ($4/fuel).
+R31 Sedan was towed to Gas Station for $70.
+R31 RV was towed to Gas Station for $70.
+R31 Pickup rolled 3; move range is 3.
+R31 Pickup moved from 30 to 33, spent 3 fuel.
+R31 Sports Car rolled 3; move range is 6.
+R31 Sports Car moved from 55 to 61, spent 2 fuel.
+R31 Sports Car moved 6 blocks, blew a tire, and used 1 spare.
+R32 Sedan was towed to Gas Station for $70.
+R32 RV was towed to Gas Station for $70.
+R32 Pickup was towed to Santa Fe for $70.
+R32 Sports Car stayed at motel for $29.
+R33 Sedan was towed to Gas Station for $70.
+R33 RV was towed to Gas Station for $70.
+R33 Pickup was towed to Santa Fe for $70.
+R33 Sports Car rolled 4; move range is 8.
+R33 Sports Car moved from 61 to 66, spent 2 fuel.
+R33 Sports Car moved 5 blocks and got a $100 ticket.
+R33 Sports Car reached Santa Monica and won the game.

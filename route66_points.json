@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Chicago",
+    "kind": "town",
+    "x": 745,
+    "y": 315
+  },
+  {
+    "name": "East St Louis",
+    "kind": "town",
+    "x": 704,
+    "y": 377
+  },
+  {
+    "name": "St Louis",
+    "kind": "town",
+    "x": 684,
+    "y": 409
+  },
+  {
+    "name": "Oklahoma City",
+    "kind": "town",
+    "x": 555,
+    "y": 467
+  },
+  {
+    "name": "Armellio",
+    "kind": "town",
+    "x": 473,
+    "y": 481
+  },
+  {
+    "name": "Albuqueue",
+    "kind": "town",
+    "x": 387,
+    "y": 489
+  },
+  {
+    "name": "Santa Fe",
+    "kind": "town",
+    "x": 376,
+    "y": 455
+  },
+  {
+    "name": "Flagstaff",
+    "kind": "town",
+    "x": 266,
+    "y": 468
+  },
+  {
+    "name": "Needles",
+    "kind": "town",
+    "x": 206,
+    "y": 486
+  },
+  {
+    "name": "Barstow",
+    "kind": "town",
+    "x": 174,
+    "y": 468
+  },
+  {
+    "name": "Pasadena",
+    "kind": "town",
+    "x": 140,
+    "y": 469
+  },
+  {
+    "name": "Santa Monica",
+    "kind": "destination",
+    "x": 129,
+    "y": 497
+  }
+]
