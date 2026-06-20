@@ -7,12 +7,20 @@ Overview of the game and goal：
 There will be four players. Each player chooses a vehicle (sedan, RV, pickup, and sports car) and races from Chicago to Los Angeles. Whoever first reached Santa Monica wins the game.
 Setup:
 
+
 At the beginning, each player chooses a type of vehicle, and will be given 300 dollars. They will use that money to put on gas, book motels, deal with emergencies, or upgrade their vehicles. Each player also has energy points 3, with fuel = full, tire = 1 (but capacity - 1). In case the money runs out, players can choose to either work at big cities by sacrificing turns, buy collectibles in a city and sell them to another city, or gamble at casinos. 
 Different types of cars :
 
+
 Sedan. Speed = 1, capacity = 3, fuel tank = 5, fuel cons: 1, energy = 3. Specialist: None.
+
+
 RV. Speed = 1 (maximum move per turn = 5) , capacity = 4, fuel tank = 20, fuel cons: 4. Energy = 3. Specialist: energy restores to 2 when sleeping at roadside. 
+
+
 Pickup. Speed = 1, capacity = 5, fuel tank = 15, fuel cons: 3, energy = 3. Specialist: bigger capacity. 
+
+
 Sports car. Speed = 2 (maximum move per turn = 10), capacity = 2, fuel tank = 5, fuel cons: 2, energy = 3. Specialist: moving fast. 
 
 
