@@ -1,7 +1,8 @@
 **To play the game, run python3 route66game.py**
 
 
-Overview of the game and goal
+Overview of the game and goal：
+
 
 There will be four players. Each player chooses a vehicle (sedan, RV, pickup, and sports car) and races from Chicago to Los Angeles. Whoever first reached Santa Monica wins the game.
 Setup:
