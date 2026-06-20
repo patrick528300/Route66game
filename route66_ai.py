@@ -28,15 +28,16 @@ class Route66AI:
             min(pos // 5, 13),
             car.fuel < car.fuel_cons,
             car.fuel < 3,
-            car.name != "RV" and car.energy <= 0,
-            car.name != "RV" and car.energy < 2,
+            car.energy <= 0,
+            car.energy < 2,
             car.money < 0,
             car.ticket_due,
+            car.flat_tire,
             car.tires > 0,
             car.gas_cans > 0,
             pos in board.CITY_STOPS,
             pos in board.RIVER_CROSSINGS,
-            board.service_points.get(pos, "road"),
+            tuple(sorted(board.services_at(pos))) or ("road",),
         )
 
     def remember(self, board: Any, car: Any, reward: float) -> None:
@@ -72,8 +73,8 @@ class Route66AI:
         fuel_buffer = car.fuel + car.gas_cans * 2
         fuel_needed_5 = car.fuel_cons * turns
         fuel_needed_city = car.fuel_cons * turns_to_city
-        energy_needed_5 = 0 if car.name == "RV" else turns
-        energy_needed_city = 0 if car.name == "RV" else turns_to_city
+        energy_needed_5 = turns
+        energy_needed_city = turns_to_city
 
         fuel_short_5 = max(0, fuel_needed_5 - fuel_buffer)
         fuel_short_city = max(0, fuel_needed_city - fuel_buffer)
@@ -84,7 +85,7 @@ class Route66AI:
         likely_service_cost = 0
         if fuel_short_5:
             likely_service_cost += 70
-        if energy_short_5 and car.name != "RV":
+        if energy_short_5:
             likely_service_cost += 30
         if car.tires <= 0:
             likely_service_cost += 20
@@ -101,7 +102,9 @@ class Route66AI:
             money_risk = 0.35
 
         tow_risk = 0.0
-        if car.fuel < car.fuel_cons and car.gas_cans <= 0:
+        if car.flat_tire:
+            tow_risk = 1.0
+        elif car.fuel < car.fuel_cons and car.gas_cans <= 0:
             tow_risk = 1.0
         elif fuel_short_5:
             tow_risk = 0.85
@@ -139,7 +142,7 @@ class Route66AI:
         needed = self.SAFE_CASH - car.money
         if needed > 100:
             return "work_three"
-        if needed > 40:
+        if needed > 50:
             return "work_two"
         return "work_one"
 
@@ -165,7 +168,7 @@ class Route66AI:
         risks = self.risk_report(board, car)
         if car.fuel <= car.fuel_cons * 2 or risks["tow"] >= 0.45:
             return board.preferred_service_stop(car.position, "gas")
-        if car.name != "RV" and car.energy <= 1:
+        if car.energy <= 1:
             return board.preferred_service_stop(car.position, "motel")
         if car.money < self.CASH_RESERVE:
             future_cities = [stop for stop in board.CITY_STOPS if stop > car.position and stop != board.CELL_COUNT]
@@ -203,7 +206,7 @@ class Route66AI:
             board.use_city_service("fill_fuel")
             self.targets.pop(car.name, None)
             return True
-        if car.name != "RV" and car.energy <= 0 and board.service_available(car.position, "motel"):
+        if car.energy <= 0 and board.service_available(car.position, "motel"):
             board.use_city_service("motel")
             self.targets.pop(car.name, None)
             return True
@@ -218,6 +221,9 @@ class Route66AI:
             return True
         if action == "pay_ticket":
             board.pay_ticket_current_car()
+            return True
+        if action == "tow_mechanic":
+            board.tow_to_mechanic_current_car()
             return True
         if action == "gas_can":
             board.use_gas_can_current_car()
@@ -236,7 +242,7 @@ class Route66AI:
             board.use_city_service("fill_fuel")
             self.targets.pop(car.name, None)
             return True
-        if car.name != "RV" and car.energy <= 1 and board.service_available(car.position, "motel"):
+        if car.energy <= 1 and board.service_available(car.position, "motel"):
             board.use_city_service("motel")
             self.targets.pop(car.name, None)
             return True
