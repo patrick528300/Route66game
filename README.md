@@ -23,6 +23,8 @@ Pickup. Speed = 1, capacity = 5, fuel tank = 15, fuel cons: 3, energy = 3. Speci
 
 Sports car. Speed = 2 (maximum move per turn = 10), capacity = 2, fuel tank = 5, fuel cons: 2, energy = 3. Specialist: moving fast. 
 
+Motorcycle. Speed =2 (maximum move per turn = 6), capacity = 1, fuel tank = 2, fuel cons: 1, energy = 3. Specialist: can still move when no gas / flat tire. 
+
 
 Different places: 
 
@@ -30,7 +32,7 @@ Big cities (Chicago, St. Louis, Oklahoma City, Armarillo, Santa Fe, Flagstaff, B
 
 Gas Station - put on gas, buy gas can, buy coffee. 
 
-Mechanics - repair / upgrade car, buy tires
+Mechanics - repair / upgrade car, buy tires. Repair flat tires.
 
 Motel - sleeping, so the player can restore energy to 3. 
 
@@ -59,13 +61,13 @@ Roll a dice and multiply the dice result by speed, clipped by the maximum move, 
 
 In every turn the energy will be reduced by 1. Players have to stay in a motel to restore the energy to be 3. 
 
-In each turn fuel is dropped by the fuel comp. If the fuel tank < fuel, then the vehicle cannot move. The vehicle will be towed to the nearest gas station (not including the ones on the other bank of Mississippi River or Colorado River).  Players have to stop by at gas stations to put on gas. If the vehicles have gas cans, consume the gas can and each gas can provides 2 fuel, so the vehicle can move again. 
+In each turn fuel is dropped by the fuel comp. If the fuel tank < fuel, then the vehicle cannot move. The vehicle will be towed to the nearest gas station (not including the ones on the other bank of Mississippi River or Colorado River).  Players have to stop by at gas stations to put on gas. If the vehicles have gas cans, consume the gas can and each gas can provides 2 fuel, so the vehicle can move again. Motorcycle player can still move when fuel = 0. Mobility can resume when motorcycle gets gas. 
 
 
 If the energy is dropped to 0, players can drink coffee to continue looking for a motel. If players do not have coffee, or they have consumed coffee, then they had to stop moving for 1 round (so they could sleep), and energy would be raised to 1. RV gets energy +2 if RV sleeps on the road. Whenever a player stops at a casino, the energy becomes 2. 
 
 
-If the players actually move >= 5 blocks, toss a dice. If the result is 1 or 2, then the player gets a ticket of $100 that must be paid next turn before moving the vehicle. If the result is 3 or 4, a tire blows off and a spare tire should be consumed; otherwise the vehicle will be towed to the nearest mechanic (not including the ones on the other bank of Mississippi River or Colorado River). (ticket is $100, and towing is $70). The player does not need to buy a tire at the mechanic – the vehicle can move next turn. 
+If the players actually move >= 5 blocks, toss a dice. If the result is 1 or 2, then the player gets a ticket of $100 that must be paid next turn before moving the vehicle. If the result is 3 or 4, a tire blows off and a spare tire should be consumed; otherwise the vehicle will be towed to the nearest mechanic (not including the ones on the other bank of Mississippi River or Colorado River) (ticket is $100, and towing is $50). If the player gets a flat tire, repair that at the mechanic where it is towed to. The repair fee is 2x the tire price at the mechanic. 
 
 
 If a player gets debts (money < 0), they can still move or spend money if they are not in a big city, but they cannot pass through nearby big cities. They have to work long enough to get their money > 0, otherwise they cannot leave the big city or spend money any more. Players earn $50 each turn when they stay to work in a city. 
@@ -77,9 +79,11 @@ Things that take a turn:
 
 Move
 
-Car under upgraded 
+Car under upgraded / repair
 
 Work 
+
+Sleep at roadside
 
 Things that can be done after moving and do not take a turn:
 
