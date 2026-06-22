@@ -15,7 +15,7 @@ Different types of cars :
 Sedan. Speed = 1, capacity = 3, fuel tank = 5, fuel cons: 1, energy = 3. Specialist: None.
 
 
-RV. Speed = 1 (maximum move per turn = 5) , capacity = 4, fuel tank = 20, fuel cons: 4. Energy = 3. Specialist: energy restores to 2 when sleeping at roadside. 
+RV. Speed = 1 (maximum move per turn = 5) , capacity = 4, fuel tank = 20, fuel cons: 4. Energy = 3. Specialist: energy restores to 3 when sleeping at roadside. 
 
 
 Pickup. Speed = 1, capacity = 5, fuel tank = 15, fuel cons: 3, energy = 3. Specialist: bigger capacity. 
@@ -51,6 +51,58 @@ Gas. spend fuel every turn to roll a dice so the vehicle moves
 Tires. Used when a tire blows off. Otherwise the vehicle will be towed to nearest mechanics (and the mechanics cannot be the other side of Mississippi River or Colorado River) 、
 
 Coffee. Used when energy = 0. Ignore energy = 0 for 1 turn (can still move). Must rest before drinking coffee again. 
+
+Collectible. Buy in a city, deliver it to other cities and sell it for profit. 
+
+
+Running the game
+
+Roll a dice and multiply the dice result by speed, clipped by the maximum move, then the player knows the range they’re able to move in this turn. Then players can move vehicles to any block within the range forward or backward. 
+
+In every turn the energy will be reduced by 1. Players have to stay in a motel to restore the energy to be 3. 
+
+In each turn fuel is dropped by the fuel comp. If the fuel tank < fuel, then the vehicle cannot move. The vehicle will be towed to the nearest gas station (not including the ones on the other bank of Mississippi River or Colorado River).  Players have to stop by at gas stations to put on gas. If the vehicles have gas cans, consume the gas can and each gas can provides 2 fuel, so the vehicle can move again. Motorcycle player can still move +1 when fuel = 0, with energy - 1 per turn. Mobility can resume when motorcycle gets gas. 
+
+
+If the energy is dropped to 0, players can drink coffee to continue looking for a motel. If players do not have coffee, or they have consumed coffee, then they had to stop moving for 1 round (so they could sleep), and energy would be raised to 1. RV gets energy +3 if RV sleeps on the road. Whenever a player stops at a casino, the energy becomes 2. 
+
+
+If the players actually move >= 5 blocks, toss a dice. If the result is 1 or 2, then the player gets a ticket of $100 that must be paid next turn before moving the vehicle. If the result is 3 or 4, a tire blows off and a spare tire should be consumed; otherwise the vehicle will be towed to the nearest mechanic (not including the ones on the other bank of Mississippi River or Colorado River) (ticket is $100, and towing is $50). If the player gets a flat tire, repair that at the mechanic where it is towed to. The repair fee is 2x the tire price at the mechanic. Motorcycle player can still move +1 when fuel = 0, with energy - 1, gas unchanged per turn. Mobility can resume when vehicle gets tire replaced. 
+
+
+If a player gets debts (money < 0), they can still move or spend money if they are not in a big city, but they cannot pass through nearby big cities. They have to work long enough to get their money > 0, otherwise they cannot leave the big city or spend money any more. Players earn $50 each turn when they stay to work in a city. 
+
+
+Players can choose to stay in a town to work. Each turn they stay in a big city, they can earn 50 dollars. 
+
+Things that take a turn:
+
+Move
+
+Car under upgraded / repair
+
+Work 
+
+Sleep at roadside
+
+Things that can be done after moving and do not take a turn:
+
+Buy stuff (coffee, …)
+
+Stay at a motel
+
+Put on gas
+
+Gamble (at a casino) 
+
+
+Upgrade Car: go to a mechanic, spend money, and wait to be repaired
+
+Capacity + 2. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
+
+Fuel tank + 3. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
+
+Speed + 1. Waiting time: 2 turns. Bill: $100, Consequence: fuel consumption +1
 
 Collectible. Buy in a city, deliver it to other cities and sell it for profit. 
 
