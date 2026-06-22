@@ -1,208 +1,397 @@
-R1 Human chose Sports Car. Other cars are AI.
-R1 Sedan bought 1 tire for $17.
-R1 Sedan rolled 4; move range is 4.
-R1 Sedan moved from 1 to 5, spent 1 fuel.
-R1 RV bought 1 tire for $17.
-R1 RV rolled 3; move range is 3.
-R1 RV moved from 1 to 4, spent 4 fuel.
-R1 Pickup bought 1 tire for $17.
-R1 Pickup rolled 3; move range is 3.
-R1 Pickup moved from 1 to 4, spent 3 fuel.
-R1 Sports Car rolled 1; move range is 2.
-R1 Sports Car moved from 1 to 3, spent 2 fuel.
-R2 Sedan rolled 6; move range is 6.
-R2 Sedan moved from 5 to 7, spent 1 fuel.
-R2 RV rolled 2; move range is 2.
-R2 RV moved from 4 to 6, spent 4 fuel.
-R2 Pickup rolled 1; move range is 1.
-R2 Pickup moved from 4 to 5, spent 3 fuel.
-R2 Sports Car rolled 1; move range is 2.
-R2 Sports Car moved from 3 to 5, spent 2 fuel.
-R3 Sedan rolled 6; move range is 6.
-R3 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
-R3 RV rolled 2; move range is 2.
+R1 Human chose Motorcycle. AI cars: Sedan, RV, Pickup, Sports Car.
+R1 Sedan rolled 5; move range is 5.
+R1 Sedan moved from 1 to 6, spent 1 fuel.
+R1 Sedan moved 5 blocks and got a $100 ticket.
+R1 AI value -10 for Sedan: ticket.
+R1 AI value -10 for Sedan: moved 5+ blocks with penalty.
+R1 RV rolled 4; move range is 4.
+R1 RV moved from 1 to 5, spent 4 fuel.
+R1 AI value +5 for RV: moved 1-4 blocks.
+R1 Pickup rolled 6; move range is 6.
+R1 Pickup moved from 1 to 7, spent 3 fuel.
+R1 Pickup moved 6 blocks and got a $100 ticket.
+R1 AI value -10 for Pickup: ticket.
+R1 AI value -10 for Pickup: moved 5+ blocks with penalty.
+R1 Sports Car rolled 2; move range is 4.
+R1 Sports Car moved from 1 to 4, spent 2 fuel.
+R1 AI value +5 for Sports Car: moved 1-4 blocks.
+R1 Motorcycle rolled 5; move range is 6.
+R1 Motorcycle moved from 1 to 5, spent 1 fuel.
+R2 Sedan paid a $100 ticket.
+R2 Sedan rolled 3; move range is 3.
+R2 Sedan moved from 6 to 7, spent 1 fuel.
+R2 AI value +5 for Sedan: moved 1-4 blocks.
+R2 RV rolled 4; move range is 4.
+R2 RV moved from 5 to 6, spent 4 fuel.
+R2 AI value +5 for RV: moved 1-4 blocks.
+R2 Pickup paid a $100 ticket.
+R2 Pickup rolled 4; move range is 4.
+R2 Pickup rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R2 Sports Car filled fuel for $6 ($3/fuel).
+R2 Sports Car rolled 2; move range is 4.
+R2 Sports Car moved from 4 to 5, spent 2 fuel.
+R2 AI value +5 for Sports Car: moved 1-4 blocks.
+R2 Motorcycle rolled 1; move range is 2.
+R2 Motorcycle moved from 5 to 7, spent 1 fuel.
+R3 Sedan rolled 4; move range is 4.
+R3 Sedan rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R3 RV rolled 4; move range is 4.
 R3 RV moved from 6 to 7, spent 4 fuel.
-R3 Pickup rolled 3; move range is 3.
-R3 Pickup moved from 5 to 7, spent 3 fuel.
-R3 Sports Car was towed to Gas Station for $70.
-R3 Sports Car filled fuel for $16 ($4/fuel).
-R3 Sports Car bought 1 coffee for $10.
+R3 AI value +5 for RV: moved 1-4 blocks.
+R3 Pickup rolled 6; move range is 6.
+R3 Pickup rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R3 Sports Car rolled 6; move range is 10.
+R3 Sports Car moved from 5 to 6, spent 2 fuel.
+R3 AI value +5 for Sports Car: moved 1-4 blocks.
+R3 Motorcycle used 1 gas can and restored 2 fuel.
+R3 Motorcycle rolled 3; move range is 6.
+R3 Motorcycle moved from 7 to 12, spent 1 fuel.
+R3 Motorcycle moved 5 blocks and got a $100 ticket.
+R3 Motorcycle filled fuel for $4 ($4/fuel).
+R3 Motorcycle bought 1 coffee for $11.
 R4 Sedan rolled 4; move range is 4.
-R4 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
-R4 RV rolled 3; move range is 3.
-R4 RV moved from 7 to 10, spent 4 fuel.
-R4 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R4 Sports Car rolled 3; move range is 6.
-R4 Sports Car moved from 4 to 7, spent 2 fuel.
-R5 Sedan rolled 2; move range is 2.
-R5 Sedan rolled even at East St Louis; stayed with fuel and energy frozen.
-R5 RV rolled 5; move range is 5.
-R5 RV moved from 10 to 15, spent 4 fuel.
-R5 RV moved 5 blocks and got a $100 ticket.
-R5 Pickup skipped a turn: sleeping on the road.
-R5 Sports Car consumed 1 coffee and restored 1 energy.
-R5 Sports Car rolled 1; move range is 2.
-R5 Sports Car moved from 7 to 8, spent 2 fuel.
-R6 Sedan rolled 3; move range is 3.
-R6 Sedan moved from 7 to 10, spent 1 fuel.
-R6 RV paid a $100 ticket.
-R6 RV was towed to Gas Station for $70.
-R6 Pickup rolled 2; move range is 2.
-R6 Pickup rolled even at East St Louis; stayed with fuel and energy frozen.
-R6 Sports Car filled fuel for $16 ($4/fuel).
-R6 Sports Car stayed at motel for $34.
-R7 Sedan slept on the road; energy restored by 1 and must skip next turn.
-R7 RV was towed to Gas Station for $70.
-R7 Pickup rolled 1; move range is 1.
-R7 Pickup moved from 7 to 8, spent 3 fuel.
-R7 Sports Car rolled 4; move range is 8.
-R7 Sports Car moved from 8 to 16, spent 2 fuel.
-R7 Sports Car moved 8 blocks and got a $100 ticket.
-R8 Sedan skipped a turn: sleeping on the road.
-R8 RV was towed to Gas Station for $70.
-R8 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R8 Sports Car paid a $100 ticket.
+R4 Sedan rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R4 RV slept on the road and restored energy to 2.
+R4 Pickup rolled 4; move range is 4.
+R4 Pickup rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R4 Sports Car used 1 gas can and restored 2 fuel.
+R4 AI value +10 for Sports Car: gas can prevented tow.
+R4 Sports Car slept on the road and restored energy to 1.
+R4 Motorcycle paid a $100 ticket.
+R4 Motorcycle consumed 1 coffee and restored 1 energy.
+R4 Motorcycle rolled 4; move range is 6.
+R4 Motorcycle moved from 12 to 18, spent 1 fuel.
+R4 Motorcycle moved 6 blocks and got a $100 ticket.
+R5 Sedan rolled 5; move range is 5.
+R5 Sedan moved from 7 to 8, spent 1 fuel.
+R5 AI value +5 for Sedan: moved 1-4 blocks.
+R5 AI value +18 for Sedan: entered St Louis at rank 2.
+R5 RV rolled 2; move range is 2.
+R5 RV rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R5 Pickup rolled 6; move range is 6.
+R5 Pickup rolled even at East St Louis - Mississippi River Crossing; stayed with fuel and energy frozen.
+R5 Sports Car rolled 2; move range is 4.
+R5 Sports Car moved from 6 to 7, spent 2 fuel.
+R5 AI value +5 for Sports Car: moved 1-4 blocks.
+R5 Motorcycle paid a $100 ticket.
+R5 Motorcycle filled fuel for $2 ($2/fuel).
+R5 Motorcycle stayed at motel for $26.
+R5 Motorcycle worked 2 turns, earned $100, and must skip 2 turns.
+R6 Sedan stayed at motel for $28.
+R6 RV rolled 1; move range is 1.
+R6 RV moved from 7 to 8, spent 4 fuel.
+R6 AI value +5 for RV: moved 1-4 blocks.
+R6 AI value +17 for RV: entered St Louis at rank 3.
+R6 Pickup rolled 3; move range is 3.
+R6 Pickup moved from 7 to 8, spent 3 fuel.
+R6 AI value +5 for Pickup: moved 1-4 blocks.
+R6 AI value +16 for Pickup: entered St Louis at rank 4.
+R6 Sports Car was towed to Gas Station for $50.
+R6 Motorcycle skipped a turn: working 2 turns.
+R7 Sedan filled fuel for $9 ($3/fuel).
+R7 Sedan rolled 5; move range is 5.
+R7 Sedan moved from 8 to 13, spent 1 fuel.
+R7 Sedan moved 5 blocks, blew a tire, and used 1 spare.
+R7 AI value +10 for Sedan: spare tire prevented tow.
+R7 AI value -10 for Sedan: moved 5+ blocks with penalty.
+R7 RV filled fuel for $48 ($3/fuel).
+R7 RV stayed at motel for $28.
+R7 Pickup filled fuel for $18 ($3/fuel).
+R7 Pickup stayed at motel for $28.
+R7 Sports Car filled fuel for $12 ($3/fuel).
+R7 Sports Car slept on the road and restored energy to 1.
+R7 Motorcycle skipped a turn: working 2 turns.
+R8 Sedan rolled 2; move range is 2.
+R8 Sedan moved from 13 to 15, spent 1 fuel.
+R8 AI value +5 for Sedan: moved 1-4 blocks.
+R8 RV rolled 5; move range is 5.
+R8 RV moved from 8 to 13, spent 4 fuel.
+R8 RV moved 5 blocks; no long-distance event.
+R8 AI value +10 for RV: moved 5+ blocks without penalty.
+R8 Pickup rolled 6; move range is 6.
+R8 Pickup moved from 8 to 14, spent 3 fuel.
+R8 Pickup moved 6 blocks and got a $100 ticket.
+R8 AI value -10 for Pickup: ticket.
+R8 AI value -10 for Pickup: moved 5+ blocks with penalty.
+R8 Sports Car bought 1 gas can for $11.
+R8 AI value +5 for Sports Car: bought gas can.
 R8 Sports Car rolled 1; move range is 2.
-R8 Sports Car moved from 16 to 18, spent 2 fuel.
-R9 Sedan rolled 6; move range is 6.
-R9 Sedan moved from 10 to 16, spent 1 fuel.
-R9 Sedan moved 6 blocks; no long-distance event.
-R9 RV was towed to Gas Station for $70.
-R9 Pickup skipped a turn: sleeping on the road.
-R9 Sports Car filled fuel for $12 ($3/fuel).
-R9 Sports Car stayed at motel for $34.
-R10 Sedan slept on the road; energy restored by 1 and must skip next turn.
-R10 RV was towed to Gas Station for $70.
-R10 Pickup filled fuel for $48 ($4/fuel).
-R10 Pickup stayed at motel for $34.
-R10 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
-R11 Sedan skipped a turn: sleeping on the road.
-R11 RV was towed to Gas Station for $70.
-R11 Pickup rolled 1; move range is 1.
-R11 Pickup moved from 8 to 9, spent 3 fuel.
-R11 Sports Car skipped a turn: working 2 turns.
-R12 Sedan rolled 1; move range is 1.
-R12 Sedan moved from 16 to 17, spent 1 fuel.
-R12 RV was towed to Gas Station for $70.
-R12 Pickup rolled 2; move range is 2.
-R12 Pickup moved from 9 to 11, spent 3 fuel.
-R12 Sports Car skipped a turn: working 2 turns.
-R13 Sedan was towed to Gas Station for $70.
-R13 RV was towed to Gas Station for $70.
-R13 Pickup rolled 4; move range is 4.
-R13 Pickup moved from 11 to 15, spent 3 fuel.
-R13 Sports Car rolled 3; move range is 6.
-R13 Sports Car moved from 18 to 24, spent 2 fuel.
-R13 Sports Car paid $70 for towing after tire blowout.
-R13 Sports Car had no spare tire and was towed to Amarillo.
-R14 Sedan was towed to Gas Station for $70.
-R14 RV was towed to Gas Station for $70.
-R14 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R14 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
-R15 Sedan was towed to Gas Station for $70.
-R15 RV was towed to Gas Station for $70.
-R15 Pickup skipped a turn: sleeping on the road.
-R15 Sports Car skipped a turn: working 2 turns.
-R16 Sedan was towed to Gas Station for $70.
-R16 RV was towed to Gas Station for $70.
-R16 Pickup rolled 2; move range is 2.
-R16 Pickup moved from 15 to 17, spent 3 fuel.
-R16 Sports Car skipped a turn: working 2 turns.
-R17 Sedan was towed to Gas Station for $70.
-R17 RV was towed to Gas Station for $70.
-R17 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R17 Sports Car rolled 5; move range is 10.
-R17 Sports Car moved from 25 to 35, spent 2 fuel.
-R17 Sports Car moved 10 blocks and got a $100 ticket.
-R18 Sedan was towed to Gas Station for $70.
-R18 RV was towed to Gas Station for $70.
-R18 Pickup skipped a turn: sleeping on the road.
-R18 Sports Car paid a $100 ticket.
-R18 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
-R19 Sedan was towed to Gas Station for $70.
-R19 RV was towed to Gas Station for $70.
-R19 Pickup filled fuel for $48 ($4/fuel).
-R19 Pickup rolled 2; move range is 2.
-R19 Pickup moved from 17 to 19, spent 3 fuel.
-R19 Sports Car skipped a turn: working 2 turns.
-R20 Sedan was towed to Gas Station for $70.
-R20 RV was towed to Gas Station for $70.
-R20 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R20 Sports Car skipped a turn: working 2 turns.
-R21 Sedan was towed to Gas Station for $70.
-R21 RV was towed to Gas Station for $70.
-R21 Pickup skipped a turn: sleeping on the road.
+R8 Sports Car moved from 4 to 5, spent 2 fuel.
+R8 AI value +5 for Sports Car: moved 1-4 blocks.
+R8 Motorcycle rolled 2; move range is 4.
+R8 Motorcycle moved from 18 to 22, spent 1 fuel.
+R8 Motorcycle filled fuel for $3 ($3/fuel).
+R8 Motorcycle bought 1 gas can for $11.
+R9 Sedan rolled 3; move range is 3.
+R9 Sedan moved from 15 to 18, spent 1 fuel.
+R9 AI value +5 for Sedan: moved 1-4 blocks.
+R9 AI value +18 for Sedan: entered Oklahoma City at rank 2.
+R9 RV rolled 3; move range is 3.
+R9 RV moved from 13 to 14, spent 4 fuel.
+R9 AI value +5 for RV: moved 1-4 blocks.
+R9 Pickup paid a $100 ticket.
+R9 Pickup rolled 1; move range is 1.
+R9 Pickup moved from 14 to 15, spent 3 fuel.
+R9 AI value +5 for Pickup: moved 1-4 blocks.
+R9 Sports Car slept on the road and restored energy to 1.
+R9 Motorcycle rolled 5; move range is 6.
+R9 Motorcycle moved from 22 to 26, spent 1 fuel.
+R9 Motorcycle entered Texas.
+R9 Motorcycle stayed at motel for $31.
+R10 Sedan stayed at motel for $26.
+R10 RV rolled 3; move range is 3.
+R10 RV moved from 14 to 15, spent 4 fuel.
+R10 AI value +5 for RV: moved 1-4 blocks.
+R10 Pickup rolled 1; move range is 1.
+R10 Pickup moved from 15 to 16, spent 3 fuel.
+R10 AI value +5 for Pickup: moved 1-4 blocks.
+R10 Sports Car rolled 1; move range is 2.
+R10 Sports Car moved from 5 to 6, spent 2 fuel.
+R10 AI value +5 for Sports Car: moved 1-4 blocks.
+R10 Motorcycle rolled 3; move range is 6.
+R10 Motorcycle moved from 26 to 30, spent 1 fuel.
+R10 Motorcycle filled fuel for $6 ($3/fuel).
+R11 Sedan filled fuel for $6 ($2/fuel).
+R11 Sedan bought 1 tire for $17.
+R11 AI value +5 for Sedan: bought tire.
+R11 Sedan rolled 3; move range is 3.
+R11 Sedan moved from 18 to 21, spent 1 fuel.
+R11 AI value +5 for Sedan: moved 1-4 blocks.
+R11 RV slept on the road and restored energy to 2.
+R11 Pickup slept on the road and restored energy to 1.
+R11 Sports Car used 1 gas can and restored 2 fuel.
+R11 AI value +10 for Sports Car: gas can prevented tow.
+R11 Sports Car slept on the road and restored energy to 1.
+R11 Motorcycle rolled 2; move range is 4.
+R11 Motorcycle moved from 30 to 34, spent 1 fuel.
+R12 Sedan rolled 2; move range is 2.
+R12 Sedan moved from 21 to 23, spent 1 fuel.
+R12 AI value +5 for Sedan: moved 1-4 blocks.
+R12 RV rolled 4; move range is 4.
+R12 RV moved from 15 to 18, spent 4 fuel.
+R12 AI value +5 for RV: moved 1-4 blocks.
+R12 AI value +17 for RV: entered Oklahoma City at rank 3.
+R12 Pickup rolled 6; move range is 6.
+R12 Pickup moved from 16 to 18, spent 3 fuel.
+R12 AI value +5 for Pickup: moved 1-4 blocks.
+R12 AI value +16 for Pickup: entered Oklahoma City at rank 4.
+R12 Sports Car rolled 5; move range is 10.
+R12 Sports Car moved from 6 to 7, spent 2 fuel.
+R12 AI value +5 for Sports Car: moved 1-4 blocks.
+R12 Motorcycle rolled 5; move range is 6.
+R12 Motorcycle moved from 34 to 35, spent 1 fuel.
+R12 Motorcycle entered New Mexico.
+R12 Motorcycle filled fuel for $6 ($3/fuel).
+R12 Motorcycle stayed at motel for $32.
+R13 Sedan rolled 1; move range is 1.
+R13 Sedan moved from 23 to 24, spent 1 fuel.
+R13 AI value +5 for Sedan: moved 1-4 blocks.
+R13 RV filled fuel for $32 ($2/fuel).
+R13 RV stayed at motel for $26.
+R13 Pickup worked 2 turns, earned $100, and must skip 2 turns.
+R13 Sports Car was towed to Gas Station for $50.
+R13 Motorcycle rolled 6; move range is 6.
+R13 Motorcycle moved from 35 to 41, spent 1 fuel.
+R13 Motorcycle moved 6 blocks and blew a tire with no spare.
+R14 Sedan slept on the road and restored energy to 1.
+R14 RV rolled 4; move range is 4.
+R14 RV moved from 18 to 22, spent 4 fuel.
+R14 AI value +5 for RV: moved 1-4 blocks.
+R14 Pickup stayed at motel for $26.
+R14 Sports Car filled fuel for $12 ($3/fuel).
+R14 Sports Car slept on the road and restored energy to 1.
+R14 Motorcycle rolled 2; move range is 1.
+R14 Motorcycle moved from 41 to 42, spent 1 fuel.
+R14 Motorcycle entered a casino block; energy became 2.
+R14 Motorcycle invested $50 at casino and got $200; energy became 2.
+R15 Sedan filled fuel for $9 ($3/fuel).
+R15 Sedan rolled 4; move range is 4.
+R15 Sedan moved from 24 to 25, spent 1 fuel.
+R15 AI value +5 for Sedan: moved 1-4 blocks.
+R15 AI value +18 for Sedan: entered Amarillo at rank 2.
+R15 RV filled fuel for $12 ($3/fuel).
+R15 RV rolled 1; move range is 1.
+R15 RV moved from 22 to 23, spent 4 fuel.
+R15 AI value +5 for RV: moved 1-4 blocks.
+R15 Pickup skipped a turn: working 2 turns.
+R15 Sports Car bought 1 gas can for $11.
+R15 AI value +5 for Sports Car: bought gas can.
+R15 Sports Car rolled 1; move range is 2.
+R15 Sports Car moved from 4 to 5, spent 2 fuel.
+R15 AI value +5 for Sports Car: moved 1-4 blocks.
+R15 Motorcycle rolled 4; move range is 1.
+R15 Motorcycle moved from 42 to 43, spent 1 fuel.
+R16 Sedan stayed at motel for $30.
+R16 RV rolled 5; move range is 5.
+R16 RV moved from 23 to 24, spent 4 fuel.
+R16 AI value +5 for RV: moved 1-4 blocks.
+R16 Pickup skipped a turn: working 2 turns.
+R16 Sports Car slept on the road and restored energy to 1.
+R16 Motorcycle rolled 1; move range is 1.
+R16 Motorcycle moved from 43 to 44, spent 1 fuel.
+R17 Sedan worked 2 turns, earned $100, and must skip 2 turns.
+R17 RV slept on the road and restored energy to 2.
+R17 Pickup filled fuel for $24 ($2/fuel).
+R17 Pickup rolled 4; move range is 4.
+R17 Pickup moved from 18 to 22, spent 3 fuel.
+R17 AI value +5 for Pickup: moved 1-4 blocks.
+R17 Sports Car rolled 6; move range is 10.
+R17 Sports Car moved from 5 to 6, spent 2 fuel.
+R17 AI value +5 for Sports Car: moved 1-4 blocks.
+R17 Motorcycle slept on the road and restored energy to 1.
+R18 Sedan skipped a turn: working 2 turns.
+R18 RV filled fuel for $24 ($3/fuel).
+R18 RV rolled 3; move range is 3.
+R18 RV moved from 24 to 27, spent 4 fuel.
+R18 AI value +5 for RV: moved 1-4 blocks.
+R18 Pickup filled fuel for $9 ($3/fuel).
+R18 Pickup rolled 4; move range is 4.
+R18 Pickup moved from 22 to 25, spent 3 fuel.
+R18 AI value +5 for Pickup: moved 1-4 blocks.
+R18 AI value +16 for Pickup: entered Amarillo at rank 4.
+R18 Sports Car used 1 gas can and restored 2 fuel.
+R18 AI value +10 for Sports Car: gas can prevented tow.
+R18 Sports Car slept on the road and restored energy to 1.
+R18 Motorcycle rolled 6; move range is 1.
+R18 Motorcycle moved from 44 to 45, spent 1 fuel.
+R18 Motorcycle entered Arizona.
+R18 Motorcycle replaced a tire for $36 and must skip 1 turn.
+R18 Motorcycle filled fuel for $4 ($4/fuel).
+R19 Sedan skipped a turn: working 2 turns.
+R19 RV rolled 1; move range is 1.
+R19 RV moved from 27 to 28, spent 4 fuel.
+R19 RV entered a casino block; energy became 2.
+R19 AI value +5 for RV: moved 1-4 blocks.
+R19 Pickup worked 2 turns, earned $100, and must skip 2 turns.
+R19 Sports Car rolled 3; move range is 6.
+R19 Sports Car moved from 6 to 7, spent 2 fuel.
+R19 AI value +5 for Sports Car: moved 1-4 blocks.
+R19 Motorcycle skipped a turn: replacing tire.
+R20 Sedan rolled 4; move range is 4.
+R20 Sedan moved from 25 to 29, spent 1 fuel.
+R20 AI value +5 for Sedan: moved 1-4 blocks.
+R20 RV filled fuel for $16 ($2/fuel).
+R20 RV rolled 5; move range is 5.
+R20 RV moved from 28 to 32, spent 4 fuel.
+R20 AI value +5 for RV: moved 1-4 blocks.
+R20 Pickup skipped a turn: working 2 turns.
+R20 Sports Car was towed to Gas Station for $50.
+R20 Motorcycle stayed at motel for $27.
+R21 Sedan rolled 5; move range is 5.
+R21 Sedan moved from 29 to 34, spent 1 fuel.
+R21 Sedan moved 5 blocks, blew a tire, and used 1 spare.
+R21 AI value +10 for Sedan: spare tire prevented tow.
+R21 AI value -10 for Sedan: moved 5+ blocks with penalty.
+R21 RV rolled 1; move range is 1.
+R21 RV moved from 32 to 33, spent 4 fuel.
+R21 RV entered a casino block; energy became 2.
+R21 AI value +5 for RV: moved 1-4 blocks.
+R21 Pickup skipped a turn: working 2 turns.
 R21 Sports Car filled fuel for $12 ($3/fuel).
-R21 Sports Car bought 1 gas can for $16.
-R21 Sports Car bought 1 tire for $21.
-R21 Sports Car rolled 4; move range is 8.
-R21 Sports Car moved from 35 to 43, spent 2 fuel.
-R21 Sports Car moved 8 blocks and got a $100 ticket.
-R22 Sedan was towed to Gas Station for $70.
-R22 RV was towed to Gas Station for $70.
-R22 Pickup rolled 5; move range is 5.
-R22 Pickup moved from 19 to 24, spent 3 fuel.
-R22 Pickup moved 5 blocks; no long-distance event.
-R22 Sports Car paid a $100 ticket.
-R22 Sports Car slept on the road; energy restored by 1 and must skip next turn.
-R23 Sedan was towed to Gas Station for $70.
-R23 RV was towed to Gas Station for $70.
-R23 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R23 Sports Car skipped a turn: sleeping on the road.
-R24 Sedan was towed to Gas Station for $70.
-R24 RV was towed to Gas Station for $70.
-R24 Pickup skipped a turn: sleeping on the road.
-R24 Sports Car rolled 3; move range is 6.
-R24 Sports Car moved from 43 to 45, spent 2 fuel.
-R24 Sports Car worked 2 turns, earned $100, and must skip 2 turns.
-R25 Sedan was towed to Gas Station for $70.
-R25 RV was towed to Gas Station for $70.
-R25 Pickup rolled 4; move range is 4.
-R25 Pickup moved from 24 to 28, spent 3 fuel.
-R25 Sports Car skipped a turn: working 2 turns.
-R26 Sedan was towed to Gas Station for $70.
-R26 RV was towed to Gas Station for $70.
-R26 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R26 Sports Car skipped a turn: working 2 turns.
-R27 Sedan was towed to Gas Station for $70.
-R27 RV was towed to Gas Station for $70.
-R27 Pickup skipped a turn: sleeping on the road.
-R27 Sports Car stayed at motel for $26.
-R27 Sports Car filled fuel for $16 ($4/fuel).
-R28 Sedan was towed to Gas Station for $70.
-R28 RV was towed to Gas Station for $70.
-R28 Pickup rolled 2; move range is 2.
-R28 Pickup moved from 28 to 30, spent 3 fuel.
-R28 Sports Car rolled 2; move range is 4.
-R28 Sports Car moved from 45 to 49, spent 2 fuel.
-R29 Sedan was towed to Gas Station for $70.
-R29 RV was towed to Gas Station for $70.
-R29 Pickup slept on the road; energy restored by 1 and must skip next turn.
-R29 Sports Car rolled 4; move range is 8.
-R29 Sports Car moved from 49 to 53, spent 2 fuel.
-R30 Sedan was towed to Gas Station for $70.
-R30 RV was towed to Gas Station for $70.
-R30 Pickup skipped a turn: sleeping on the road.
-R30 Sports Car used 1 gas can and restored 2 fuel.
-R30 Sports Car rolled 3; move range is 6.
-R30 Sports Car moved from 53 to 55, spent 2 fuel.
-R30 Sports Car stayed at motel for $29.
-R30 Sports Car filled fuel for $16 ($4/fuel).
-R31 Sedan was towed to Gas Station for $70.
-R31 RV was towed to Gas Station for $70.
-R31 Pickup rolled 3; move range is 3.
-R31 Pickup moved from 30 to 33, spent 3 fuel.
-R31 Sports Car rolled 3; move range is 6.
-R31 Sports Car moved from 55 to 61, spent 2 fuel.
-R31 Sports Car moved 6 blocks, blew a tire, and used 1 spare.
-R32 Sedan was towed to Gas Station for $70.
-R32 RV was towed to Gas Station for $70.
-R32 Pickup was towed to Santa Fe for $70.
-R32 Sports Car stayed at motel for $29.
-R33 Sedan was towed to Gas Station for $70.
-R33 RV was towed to Gas Station for $70.
-R33 Pickup was towed to Santa Fe for $70.
-R33 Sports Car rolled 4; move range is 8.
-R33 Sports Car moved from 61 to 66, spent 2 fuel.
-R33 Sports Car moved 5 blocks and got a $100 ticket.
-R33 Sports Car reached Santa Monica and won the game.
+R21 Sports Car slept on the road and restored energy to 1.
+R21 Motorcycle rolled 6; move range is 6.
+R21 Motorcycle moved from 45 to 51, spent 1 fuel.
+R21 Motorcycle moved 6 blocks and blew a tire with no spare.
+R22 Sedan rolled 2; move range is 2.
+R22 Sedan moved from 34 to 35, spent 1 fuel.
+R22 AI value +5 for Sedan: moved 1-4 blocks.
+R22 AI value +18 for Sedan: entered Santa Fe at rank 2.
+R22 RV rolled 2; move range is 2.
+R22 RV moved from 33 to 35, spent 4 fuel.
+R22 AI value +5 for RV: moved 1-4 blocks.
+R22 AI value +17 for RV: entered Santa Fe at rank 3.
+R22 Pickup filled fuel for $9 ($3/fuel).
+R22 Pickup stayed at motel for $30.
+R22 Sports Car bought 1 gas can for $11.
+R22 AI value +5 for Sports Car: bought gas can.
+R22 Sports Car rolled 5; move range is 10.
+R22 Sports Car moved from 4 to 5, spent 2 fuel.
+R22 AI value +5 for Sports Car: moved 1-4 blocks.
+R22 Motorcycle rolled 3; move range is 1.
+R22 Motorcycle moved from 51 to 52, spent 1 fuel.
+R22 Motorcycle replaced a tire for $44 and must skip 1 turn.
+R23 Sedan stayed at motel for $32.
+R23 RV filled fuel for $36 ($3/fuel).
+R23 RV worked 2 turns, earned $100, and must skip 2 turns.
+R23 Pickup rolled 4; move range is 4.
+R23 Pickup moved from 25 to 29, spent 3 fuel.
+R23 AI value +5 for Pickup: moved 1-4 blocks.
+R23 Sports Car slept on the road and restored energy to 1.
+R23 Motorcycle skipped a turn: replacing tire.
+R24 Sedan filled fuel for $12 ($3/fuel).
+R24 Sedan bought 1 tire for $21.
+R24 AI value +5 for Sedan: bought tire.
+R24 Sedan rolled 4; move range is 4.
+R24 Sedan moved from 35 to 39, spent 1 fuel.
+R24 AI value +5 for Sedan: moved 1-4 blocks.
+R24 RV skipped a turn: working 2 turns.
+R24 Pickup rolled 4; move range is 4.
+R24 Pickup moved from 29 to 30, spent 3 fuel.
+R24 AI value +5 for Pickup: moved 1-4 blocks.
+R24 Sports Car rolled 2; move range is 4.
+R24 Sports Car moved from 5 to 6, spent 2 fuel.
+R24 AI value +5 for Sports Car: moved 1-4 blocks.
+R24 Motorcycle rolled 3; move range is 6.
+R24 Motorcycle moved from 52 to 53, spent 1 fuel.
+R25 Sedan rolled 4; move range is 4.
+R25 Sedan moved from 39 to 43, spent 1 fuel.
+R25 AI value +5 for Sedan: moved 1-4 blocks.
+R25 RV skipped a turn: working 2 turns.
+R25 Pickup filled fuel for $18 ($3/fuel).
+R25 Pickup rolled 1; move range is 1.
+R25 Pickup moved from 30 to 31, spent 3 fuel.
+R25 AI value +5 for Pickup: moved 1-4 blocks.
+R25 Sports Car used 1 gas can and restored 2 fuel.
+R25 AI value +10 for Sports Car: gas can prevented tow.
+R25 Sports Car slept on the road and restored energy to 1.
+R25 Motorcycle used 1 gas can and restored 2 fuel.
+R25 Motorcycle slept on the road and restored energy to 1.
+R26 Sedan rolled 6; move range is 6.
+R26 Sedan moved from 43 to 45, spent 1 fuel.
+R26 AI value +5 for Sedan: moved 1-4 blocks.
+R26 AI value +18 for Sedan: entered Flagstaff at rank 2.
+R26 RV stayed at motel for $32.
+R26 Pickup slept on the road and restored energy to 1.
+R26 Sports Car rolled 6; move range is 10.
+R26 Sports Car moved from 6 to 7, spent 2 fuel.
+R26 AI value +5 for Sports Car: moved 1-4 blocks.
+R26 Motorcycle rolled 5; move range is 6.
+R26 Motorcycle moved from 53 to 59, spent 1 fuel.
+R26 Motorcycle moved 6 blocks; no long-distance event.
+R26 Motorcycle entered California.
+R27 Sedan stayed at motel for $27.
+R27 RV rolled 2; move range is 2.
+R27 RV moved from 35 to 37, spent 4 fuel.
+R27 AI value +5 for RV: moved 1-4 blocks.
+R27 Pickup rolled 2; move range is 2.
+R27 Pickup moved from 31 to 32, spent 3 fuel.
+R27 AI value +5 for Pickup: moved 1-4 blocks.
+R27 Sports Car was towed to Gas Station for $50.
+R27 Motorcycle slept on the road and restored energy to 1.
+R28 Sedan worked 2 turns, earned $100, and must skip 2 turns.
+R28 RV rolled 3; move range is 3.
+R28 RV moved from 37 to 38, spent 4 fuel.
+R28 AI value +5 for RV: moved 1-4 blocks.
+R28 Pickup slept on the road and restored energy to 1.
+R28 Sports Car filled fuel for $12 ($3/fuel).
+R28 Sports Car slept on the road and restored energy to 1.
+R28 Motorcycle rolled 5; move range is 6.
+R28 Motorcycle moved from 59 to 62, spent 1 fuel.
+R28 Motorcycle filled fuel for $12 ($6/fuel).
+R28 Motorcycle stayed at motel for $34.
+R29 Sedan skipped a turn: working 2 turns.
+R29 RV rolled 4; move range is 4.
+R29 RV moved from 38 to 42, spent 4 fuel.
+R29 RV entered a casino block; energy became 2.
+R29 AI value +5 for RV: moved 1-4 blocks.
+R29 Pickup rolled 1; move range is 1.
+R29 Pickup moved from 32 to 33, spent 3 fuel.
+R29 Pickup entered a casino block; energy became 2.
+R29 AI value +5 for Pickup: moved 1-4 blocks.
+R29 Sports Car rolled 2; move range is 4.
+R29 Sports Car moved from 4 to 5, spent 2 fuel.
+R29 AI value +5 for Sports Car: moved 1-4 blocks.
+R29 Motorcycle rolled 2; move range is 4.
+R29 Motorcycle moved from 62 to 66, spent 1 fuel.
+R29 Motorcycle reached Santa Monica. Race will end after round 29.
+R29 Motorcycle reached Santa Monica and won the game.

@@ -115,7 +115,7 @@ STATE_RANGES = [
 SERVICE_COSTS = {
     "fill_fuel": 5,
     "motel": 30,
-    "tow": 70,
+    "tow": 50,
     "tire": 20,
     "gas_can": 15,
     "coffee": 10,
@@ -187,7 +187,7 @@ class Route66Board:
         self.panel_font = pygame.font.SysFont("Arial", 18, bold=True)
         self.title = pygame.font.SysFont("Arial", 28, bold=True)
         self.game_state = "select"
-        self.human_vehicle: int | None = None
+        self.human_vehicles: set[int] = set()
         self.ai = Route66AI()
         self.ai_next_action_at = 0
         self.CITY_STOPS = CITY_STOPS
@@ -197,7 +197,7 @@ class Route66Board:
 
     def setup_new_game(self) -> None:
         self.game_state = "select"
-        self.human_vehicle = None
+        self.human_vehicles = set()
         self.ai = Route66AI()
         self.ai_next_action_at = 0
         self.vehicles = [
@@ -205,6 +205,7 @@ class Route66Board:
             Vehicle("RV", speed=1, max_move=5, fuel_tank=20, fuel=20, fuel_cons=4, capacity=4, tires=1, gas_cans=1, color=(128, 92, 166)),
             Vehicle("Pickup", speed=1, max_move=6, fuel_tank=15, fuel=15, fuel_cons=3, capacity=5, tires=1, gas_cans=1, color=(203, 112, 48)),
             Vehicle("Sports Car", speed=2, max_move=10, fuel_tank=5, fuel=5, fuel_cons=2, capacity=2, tires=1, gas_cans=1, color=(194, 54, 70)),
+            Vehicle("Motorcycle", speed=2, max_move=6, fuel_tank=2, fuel=2, fuel_cons=1, capacity=1, tires=0, gas_cans=1, color=(42, 151, 125)),
         ]
         self.vehicles[0].capacity = 3
         self.current_vehicle = 0
@@ -227,7 +228,7 @@ class Route66Board:
         self.race_finish_round: int | None = None
         self.service_points = self.generate_service_points()
         self.price_modifiers = self.generate_price_modifiers()
-        self.add_transaction("Choose a human vehicle.")
+        self.add_transaction("Choose human vehicle(s).")
 
     def generate_service_points(self) -> dict[int, set[str]]:
         unavailable = set(CITY_STOPS) | set(RIVER_CROSSINGS)
@@ -259,6 +260,8 @@ class Route66Board:
             return self.fuel_price_at(position) * 2 + 5
         if action == "casino":
             return SERVICE_COSTS["casino"]
+        if action == "replace_tire":
+            return self.price_at(position, "tire") * 2
         base = SERVICE_COSTS[action]
         modifier = self.price_modifiers.get(position, 1.0)
         return max(1, round(base * modifier))
@@ -357,28 +360,44 @@ class Route66Board:
 
     def selection_card_rects(self) -> list[pygame.Rect]:
         width, height = self.screen.get_size()
-        card_w = min(250, (width - 140) // 4)
+        count = len(self.vehicles)
+        card_w = min(220, (width - 120) // count)
         card_h = 250
-        gap = 22
-        total_w = card_w * 4 + gap * 3
+        gap = 16
+        total_w = card_w * count + gap * (count - 1)
         start_x = (width - total_w) // 2
         y = max(170, height // 2 - card_h // 2 + 30)
-        return [pygame.Rect(start_x + idx * (card_w + gap), y, card_w, card_h) for idx in range(4)]
+        return [pygame.Rect(start_x + idx * (card_w + gap), y, card_w, card_h) for idx in range(count)]
 
-    def select_vehicle(self, index: int) -> None:
-        self.human_vehicle = index
+    def selection_start_rect(self) -> pygame.Rect:
+        width, height = self.screen.get_size()
+        return pygame.Rect(width // 2 - 90, height - 86, 180, 38)
+
+    def toggle_human_vehicle(self, index: int) -> None:
+        if index in self.human_vehicles:
+            self.human_vehicles.remove(index)
+        else:
+            self.human_vehicles.add(index)
+
+    def start_selected_vehicles(self) -> None:
+        if not self.human_vehicles:
+            self.message = "Select at least one human vehicle."
+            return
         self.game_state = "play"
         self.transactions.clear()
-        self.add_transaction(f"Human chose {self.vehicles[index].name}. Other cars are AI.")
-        self.message = f"You are driving the {self.vehicles[index].name}."
+        human_names = ", ".join(self.vehicles[index].name for index in sorted(self.human_vehicles))
+        ai_names = ", ".join(
+            vehicle.name for index, vehicle in enumerate(self.vehicles)
+            if index not in self.human_vehicles
+        ) or "none"
+        self.add_transaction(f"Human chose {human_names}. AI cars: {ai_names}.")
+        self.message = f"Human controls: {human_names}."
 
     def is_human_turn(self) -> bool:
-        return self.human_vehicle == self.current_vehicle
+        return self.current_vehicle in self.human_vehicles
 
     def is_ai_car(self, car: Vehicle) -> bool:
-        if self.human_vehicle is None:
-            return False
-        return any(vehicle is car and index != self.human_vehicle for index, vehicle in enumerate(self.vehicles))
+        return any(vehicle is car and index not in self.human_vehicles for index, vehicle in enumerate(self.vehicles))
 
     def reward_ai_state(self, car: Vehicle, reward: float, reason: str) -> None:
         if not self.is_ai_car(car):
@@ -417,9 +436,9 @@ class Route66Board:
             return "Debt in big city. Work until money is above $0."
         if car.ticket_due:
             return "Ticket unpaid. Pay $100 before moving."
-        if car.flat_tire:
+        if car.flat_tire and car.name != "Motorcycle":
             return "Flat tire. Tow to a mechanic before moving."
-        if car.fuel < car.fuel_cons:
+        if car.fuel < car.fuel_cons and car.name != "Motorcycle":
             return "Fuel is empty. Tow to nearest city service."
         if car.energy <= 0:
             return "Energy is empty. Sleep before moving."
@@ -430,11 +449,11 @@ class Route66Board:
             return "skip_wait"
         if car.ticket_due:
             return "pay_ticket"
-        if car.flat_tire:
+        if car.flat_tire and not (car.name == "Motorcycle" and car.energy <= 0):
             return "tow_mechanic"
         if car.fuel < car.fuel_cons and car.gas_cans > 0:
             return "gas_can"
-        if car.fuel < car.fuel_cons:
+        if car.fuel < car.fuel_cons and car.name != "Motorcycle":
             return "tow"
         if car.energy <= 0 and car.coffee > 0:
             return "coffee"
@@ -467,6 +486,8 @@ class Route66Board:
             return
         self.die_roll = random.randint(1, 6)
         self.move_range = min(self.die_roll * car.speed, car.max_move)
+        if car.name == "Motorcycle" and (car.flat_tire or car.fuel < car.fuel_cons):
+            self.move_range = 1
         self.add_transaction(f"{car.name} rolled {self.die_roll}; move range is {self.move_range}.")
         if car.position in RIVER_CROSSINGS and self.die_roll % 2 == 0:
             river = RIVER_CROSSINGS[car.position]
@@ -509,7 +530,8 @@ class Route66Board:
         distance = abs(destination - start)
         car.position = destination
         car.energy = max(0, car.energy - 1)
-        car.fuel = max(0, car.fuel - car.fuel_cons)
+        if not (car.name == "Motorcycle" and (car.flat_tire or car.fuel < car.fuel_cons)):
+            car.fuel = max(0, car.fuel - car.fuel_cons)
         if "casino" in self.services_at(car.position):
             car.energy = 2
         self.move_options.clear()
@@ -666,7 +688,8 @@ class Route66Board:
     def maybe_show_state_entry(self, car: Vehicle, start: int, destination: int) -> None:
         if self.popup_title:
             return
-        if self.human_vehicle is None or self.vehicles[self.human_vehicle] is not car:
+        car_index = next((index for index, vehicle in enumerate(self.vehicles) if vehicle is car), None)
+        if car_index not in self.human_vehicles:
             return
         old_state = self.state_for_position(start)
         new_state = self.state_for_position(destination)
@@ -717,7 +740,7 @@ class Route66Board:
         if debt_locked and action not in {"work_one", "work_two", "work_three", "sell_collectible"}:
             self.message = "Debt rule: work in this city until money is above $0."
             return
-        turn_service = action in {"motel", "work_one", "work_two", "work_three", "capacity", "fuel_tank", "speed", "casino"}
+        turn_service = action in {"motel", "work_one", "work_two", "work_three", "capacity", "fuel_tank", "speed", "casino", "replace_tire"}
         work_action = action in {"work_one", "work_two", "work_three"}
         if turn_service and self.turn_service_used and not work_action:
             self.message = "This turn already used a work or upgrade service."
@@ -752,6 +775,19 @@ class Route66Board:
                 self.message = f"Bought 1 tire for ${cost}."
                 self.add_transaction(f"{car.name} bought 1 tire for ${cost}.")
                 self.reward_ai_state(car, +5, "bought tire")
+        elif action == "replace_tire":
+            if not car.flat_tire:
+                self.message = "Replace tire is only needed after a flat tire."
+                return
+            cost = self.price_at(car.position, action)
+            if self.spend_money(car, cost):
+                car.flat_tire = False
+                car.skip_turns = 1
+                car.skip_reason = "replacing tire"
+                self.turn_done = True
+                self.turn_service_used = True
+                self.message = f"Replaced tire for ${cost}. Skip 1 turn."
+                self.add_transaction(f"{car.name} replaced a tire for ${cost} and must skip 1 turn.")
         elif action == "gas_can":
             cost = self.price_at(car.position, action)
             if self.has_cargo_space(car) and self.spend_money(car, cost):
@@ -865,12 +901,15 @@ class Route66Board:
     def service_available(self, position: int, action: str) -> bool:
         if action == "arm":
             return False
+        car = self.current_car()
+        if car.name == "Motorcycle" and action in {"capacity", "fuel_tank", "speed"}:
+            return False
         if position in CITY_STOPS and position != CELL_COUNT:
             return action != "casino"
         service_kinds = self.services_at(position)
         allowed = {
             "gas": {"fill_fuel", "gas_can", "coffee"},
-            "mechanic": {"tire", "capacity", "fuel_tank", "speed"},
+            "mechanic": {"tire", "replace_tire", "capacity", "fuel_tank", "speed"},
             "motel": {"motel"},
             "casino": {"casino"},
         }
@@ -902,8 +941,8 @@ class Route66Board:
         self.turn_done = True
         self.turn_service_used = True
         city = self.stop_name(destination)
-        self.message = f"Towed to {city} for $70. Turn finished."
-        self.add_transaction(f"{car.name} was towed to {city} for $70.")
+        self.message = f"Towed to {city} for $50. Turn finished."
+        self.add_transaction(f"{car.name} was towed to {city} for $50.")
 
     def tow_to_mechanic_current_car(self) -> None:
         if self.move_options or self.turn_done:
@@ -916,12 +955,11 @@ class Route66Board:
             return
         destination = self.nearest_service_stop(car.position, "mechanic")
         car.position = destination
-        car.flat_tire = False
         self.turn_done = True
         self.turn_service_used = True
         stop = self.stop_name(destination)
-        self.message = f"Towed to {stop} for $70. Turn finished."
-        self.add_transaction(f"{car.name} was towed to {stop} for $70 after a flat tire.")
+        self.message = f"Towed to {stop} for $50. Replace the tire before moving."
+        self.add_transaction(f"{car.name} was towed to {stop} for $50 after a flat tire.")
 
     def use_gas_can_current_car(self) -> None:
         if self.move_options or self.turn_done:
@@ -946,12 +984,11 @@ class Route66Board:
         if car.energy > 0:
             self.message = "Sleep is only needed when energy is empty."
             return
-        car.skip_turns = 1
-        car.skip_reason = "sleeping on the road"
+        car.energy = min(3, car.energy + 3) if car.name == "RV" else 1
         self.turn_done = True
         self.turn_service_used = True
-        self.message = "Sleeping on the road. Skip 1 turn, then energy restores +2."
-        self.add_transaction(f"{car.name} slept on the road; energy will restore +2 after 1 skipped turn.")
+        self.message = f"Slept on the road. Energy restored to {car.energy}. Turn finished."
+        self.add_transaction(f"{car.name} slept on the road and restored energy to {car.energy}.")
 
     def drink_coffee_current_car(self) -> None:
         if self.move_options or self.turn_done:
@@ -1015,12 +1052,13 @@ class Route66Board:
     def draw_selection_screen(self) -> None:
         self.screen.fill(BG)
         width, _ = self.screen.get_size()
-        draw_text(self.screen, self.title, "Choose Your Vehicle", (width // 2, 86), WHITE)
-        draw_text(self.screen, self.panel_font, "Human player picks first. The other three cars will be AI controlled.", (width // 2, 124), (210, 214, 218))
+        draw_text(self.screen, self.title, "Choose Human Vehicles", (width // 2, 86), WHITE)
+        draw_text(self.screen, self.panel_font, "Select one or more cars. Unselected cars will be AI controlled.", (width // 2, 124), (210, 214, 218))
 
         for idx, (rect, car) in enumerate(zip(self.selection_card_rects(), self.vehicles)):
+            selected = idx in self.human_vehicles
             pygame.draw.rect(self.screen, PANEL, rect, border_radius=8)
-            pygame.draw.rect(self.screen, PANEL_EDGE, rect, 2, border_radius=8)
+            pygame.draw.rect(self.screen, HIGHLIGHT if selected else PANEL_EDGE, rect, 4 if selected else 2, border_radius=8)
             self.draw_car_icon(car, (rect.centerx, rect.y + 62), 1.15)
             draw_text(self.screen, self.title, car.name, (rect.centerx, rect.y + 116), TEXT)
             lines = [
@@ -1035,13 +1073,19 @@ class Route66Board:
                 draw_text_left(self.screen, self.panel_font, line, (rect.x + 24, y), MUTED)
                 y += 22
             button = pygame.Rect(rect.x + 36, rect.bottom - 44, rect.width - 72, 30)
-            pygame.draw.rect(self.screen, BUTTON, button, border_radius=7)
-            draw_text(self.screen, self.panel_font, "Select", button.center, WHITE)
+            pygame.draw.rect(self.screen, BUTTON_ALT if selected else BUTTON, button, border_radius=7)
+            draw_text(self.screen, self.panel_font, "Selected" if selected else "Select", button.center, WHITE)
+
+        start = self.selection_start_rect()
+        pygame.draw.rect(self.screen, BUTTON if self.human_vehicles else BUTTON_DISABLED, start, border_radius=7)
+        draw_text(self.screen, self.panel_font, "Start Game", start.center, WHITE)
+        if self.message.startswith("Select at least"):
+            draw_text(self.screen, self.small, self.message, (width // 2, start.bottom + 18), ERROR)
 
         pygame.display.flip()
 
     def draw_vehicles(self, centers: list[tuple[int, int]]) -> None:
-        offsets = [(-13, -22), (13, -22), (-13, 22), (13, 22)]
+        offsets = [(-18, -22), (18, -22), (-18, 20), (18, 20), (0, 0)]
         for index, car in enumerate(self.vehicles):
             center = centers[car.position - 1]
             ox, oy = offsets[index]
@@ -1062,10 +1106,19 @@ class Route66Board:
                 pygame.draw.rect(self.screen, TEXT, building)
             return
         if position in RIVER_CROSSINGS:
-            pygame.draw.circle(self.screen, WHITE, icon.center, 11)
-            pygame.draw.circle(self.screen, CELL_EDGE, icon.center, 11, 1)
-            for offset in (-4, 2):
-                pygame.draw.arc(self.screen, RIVER_CELL, icon.inflate(-4, -10).move(0, offset), 0, 3.14, 2)
+            pygame.draw.rect(self.screen, WHITE, icon, border_radius=3)
+            pygame.draw.rect(self.screen, CELL_EDGE, icon, 1, border_radius=3)
+            boat_color = (132, 92, 54)
+            hull = [
+                (icon.x + 3, icon.y + 12),
+                (icon.x + 6, icon.bottom - 4),
+                (icon.right - 6, icon.bottom - 4),
+                (icon.right - 3, icon.y + 12),
+            ]
+            pygame.draw.polygon(self.screen, boat_color, hull)
+            pygame.draw.line(self.screen, CELL_EDGE, (icon.x + 5, icon.y + 12), (icon.right - 5, icon.y + 12), 1)
+            pygame.draw.line(self.screen, boat_color, (icon.x + 4, icon.y + 7), (icon.right - 4, icon.bottom - 3), 2)
+            pygame.draw.circle(self.screen, boat_color, (icon.x + 5, icon.y + 7), 2)
             return
         service_kinds = sorted(self.services_at(position))
         if not service_kinds:
@@ -1137,6 +1190,8 @@ class Route66Board:
             return self.draw_rv(car, center, scale)
         if car.name == "Pickup":
             return self.draw_pickup(car, center, scale)
+        if car.name == "Motorcycle":
+            return self.draw_motorcycle(car, center, scale)
         return self.draw_sports_car(car, center, scale)
 
     def draw_wheels(self, body: pygame.Rect, scale: float) -> None:
@@ -1192,6 +1247,65 @@ class Route66Board:
         pygame.draw.line(self.screen, CELL_EDGE, (bed.left, bed.top), (bed.right, bed.top), max(1, round(2 * scale)))
         self.draw_wheels(body, scale)
         return body.union(cab)
+
+    def draw_motorcycle(self, car: Vehicle, center: tuple[int, int], scale: float) -> pygame.Rect:
+        body = pygame.Rect(0, 0, round(76 * scale), round(34 * scale))
+        body.center = center
+        wheel_r = max(4, round(8 * scale))
+        rear = (body.left + round(16 * scale), body.bottom - wheel_r)
+        front = (body.right - round(13 * scale), body.bottom - wheel_r)
+        pygame.draw.circle(self.screen, CELL_EDGE, rear, wheel_r, max(1, round(2 * scale)))
+        pygame.draw.circle(self.screen, CELL_EDGE, front, wheel_r, max(1, round(2 * scale)))
+        pygame.draw.circle(self.screen, (215, 214, 205), rear, max(1, wheel_r // 2))
+        pygame.draw.circle(self.screen, (215, 214, 205), front, max(1, wheel_r // 2))
+        red = (210, 38, 48)
+        blue = (42, 92, 182)
+        dark = CELL_EDGE
+        fairing = [
+            (body.left + round(10 * scale), body.y + round(18 * scale)),
+            (body.left + round(24 * scale), body.y + round(9 * scale)),
+            (body.left + round(50 * scale), body.y + round(8 * scale)),
+            (body.right - round(3 * scale), body.y + round(16 * scale)),
+            (body.right - round(15 * scale), body.y + round(24 * scale)),
+            (body.left + round(36 * scale), body.bottom - round(4 * scale)),
+            (body.left + round(16 * scale), body.bottom - round(8 * scale)),
+        ]
+        pygame.draw.polygon(self.screen, red, fairing)
+        pygame.draw.polygon(
+            self.screen,
+            dark,
+            [
+                (body.left + round(24 * scale), body.y + round(10 * scale)),
+                (body.left + round(40 * scale), body.y + round(4 * scale)),
+                (body.left + round(55 * scale), body.y + round(9 * scale)),
+                (body.left + round(42 * scale), body.y + round(13 * scale)),
+            ],
+        )
+        windshield = [
+            (body.right - round(19 * scale), body.y + round(7 * scale)),
+            (body.right - round(8 * scale), body.y + round(10 * scale)),
+            (body.right - round(17 * scale), body.y + round(14 * scale)),
+        ]
+        pygame.draw.polygon(self.screen, WINDOW, windshield)
+        tail = [
+            (body.left + round(5 * scale), body.y + round(15 * scale)),
+            (body.left + round(24 * scale), body.y + round(10 * scale)),
+            (body.left + round(19 * scale), body.y + round(20 * scale)),
+        ]
+        pygame.draw.polygon(self.screen, red, tail)
+        pygame.draw.line(self.screen, WHITE, (body.left + round(28 * scale), body.y + round(16 * scale)), (body.right - round(20 * scale), body.y + round(18 * scale)), max(1, round(2 * scale)))
+        pygame.draw.line(self.screen, blue, (body.left + round(31 * scale), body.y + round(19 * scale)), (body.right - round(22 * scale), body.y + round(21 * scale)), max(1, round(2 * scale)))
+        engine = pygame.Rect(body.left + round(33 * scale), body.y + round(22 * scale), round(15 * scale), round(10 * scale))
+        pygame.draw.ellipse(self.screen, PANEL_EDGE, engine)
+        swingarm_y = body.bottom - round(10 * scale)
+        pygame.draw.line(self.screen, dark, rear, (body.left + round(38 * scale), swingarm_y), max(1, round(2 * scale)))
+        pygame.draw.line(self.screen, dark, (body.left + round(38 * scale), swingarm_y), front, max(1, round(2 * scale)))
+        fork_top = (front[0] + round(4 * scale), front[1] - round(21 * scale))
+        pygame.draw.line(self.screen, PANEL_EDGE, front, fork_top, max(1, round(2 * scale)))
+        pygame.draw.line(self.screen, PANEL_EDGE, (front[0] - round(4 * scale), front[1]), (fork_top[0] - round(4 * scale), fork_top[1]), max(1, round(2 * scale)))
+        pygame.draw.line(self.screen, dark, (fork_top[0] - round(8 * scale), fork_top[1] - round(3 * scale)), (fork_top[0] + round(6 * scale), fork_top[1] - round(4 * scale)), max(1, round(2 * scale)))
+        pygame.draw.line(self.screen, PANEL_EDGE, (body.left + round(34 * scale), body.bottom - round(5 * scale)), (body.left + round(58 * scale), body.bottom - round(2 * scale)), max(1, round(2 * scale)))
+        return body
 
     def draw_sports_car(self, car: Vehicle, center: tuple[int, int], scale: float) -> pygame.Rect:
         body = pygame.Rect(0, 0, round(68 * scale), round(21 * scale))
@@ -1321,6 +1435,7 @@ class Route66Board:
                 "Mechanic",
                 [
                     ("Tire", "tire"),
+                    ("Replace", "replace_tire"),
                     ("Cap +2", "capacity"),
                     ("Tank +3", "fuel_tank"),
                     ("Speed +1", "speed"),
@@ -1355,7 +1470,7 @@ class Route66Board:
         y += 24
         service_actions = {
             "gas": [("Fill fuel", "fill_fuel"), ("Gas can", "gas_can"), ("Coffee", "coffee")],
-            "mechanic": [("Tire", "tire"), ("Cap +2", "capacity"), ("Tank +3", "fuel_tank"), ("Speed +1", "speed")],
+            "mechanic": [("Tire", "tire"), ("Replace", "replace_tire"), ("Cap +2", "capacity"), ("Tank +3", "fuel_tank"), ("Speed +1", "speed")],
             "motel": [("Motel", "motel")],
             "casino": [("Invest", "casino")],
         }
@@ -1422,6 +1537,7 @@ class Route66Board:
             [
                 (f"Cargo {self.cargo_used(car)}/{car.capacity}", MUTED),
                 (f"Tires {car.tires}", MUTED),
+                ("Flat YES" if car.flat_tire else "Flat no", ERROR if car.flat_tire else MUTED),
                 (f"Cans {car.gas_cans}", MUTED),
                 (f"Coffee {car.coffee}", MUTED),
                 (f"Coll {car.collectibles}", MUTED),
@@ -1442,7 +1558,7 @@ class Route66Board:
         y = box.y + 34
         for rank, (index, car) in enumerate(self.rankings(), start=1):
             color = TEXT if index == self.current_vehicle else MUTED
-            driver = "H" if index == self.human_vehicle else "AI"
+            driver = "H" if index in self.human_vehicles else "AI"
             short_name = {"Sports Car": "Sports"}.get(car.name, car.name)
             draw_text_left(self.screen, self.small, f"{rank}. {short_name} {car.position} ({driver})", (box.x + 10, y), color)
             y += 16
@@ -1563,9 +1679,12 @@ class Route66Board:
                     if event.type == pygame.KEYDOWN and event.key == pygame.K_n:
                         self.setup_new_game()
                     if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                        if self.selection_start_rect().collidepoint(event.pos):
+                            self.start_selected_vehicles()
+                            continue
                         for idx, rect in enumerate(self.selection_card_rects()):
                             if rect.collidepoint(event.pos):
-                                self.select_vehicle(idx)
+                                self.toggle_human_vehicle(idx)
                                 break
                     continue
                 if event.type == pygame.KEYDOWN:

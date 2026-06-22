@@ -84,7 +84,7 @@ class Route66AI:
         ticket_cost = 100 if car.ticket_due else 0
         likely_service_cost = 0
         if fuel_short_5:
-            likely_service_cost += 70
+            likely_service_cost += 50
         if energy_short_5:
             likely_service_cost += 30
         if car.tires <= 0:
@@ -102,9 +102,9 @@ class Route66AI:
             money_risk = 0.35
 
         tow_risk = 0.0
-        if car.flat_tire:
+        if car.flat_tire and car.name != "Motorcycle":
             tow_risk = 1.0
-        elif car.fuel < car.fuel_cons and car.gas_cans <= 0:
+        elif car.fuel < car.fuel_cons and car.gas_cans <= 0 and car.name != "Motorcycle":
             tow_risk = 1.0
         elif fuel_short_5:
             tow_risk = 0.85
@@ -166,6 +166,8 @@ class Route66AI:
 
     def survival_target(self, board: Any, car: Any) -> int | None:
         risks = self.risk_report(board, car)
+        if car.name == "Motorcycle" and car.flat_tire:
+            return board.preferred_service_stop(car.position, "mechanic")
         if car.fuel <= car.fuel_cons * 2 or risks["tow"] >= 0.45:
             return board.preferred_service_stop(car.position, "gas")
         if car.energy <= 1:
@@ -213,6 +215,10 @@ class Route66AI:
 
         if self.should_sell_collectible(board, car):
             board.use_city_service("sell_collectible")
+            return True
+
+        if car.flat_tire and board.service_available(car.position, "replace_tire"):
+            board.use_city_service("replace_tire")
             return True
 
         action = board.emergency_action(car)
