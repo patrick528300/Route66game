@@ -1,158 +1,91 @@
-**To play the game, run python3 route66game.py**
+# Route 66 — Road Trip Strategy Game
 
+Route 66 is a turn-based resource-management race from Chicago to Santa Monica. Players choose vehicles with different strengths, then balance speed against fuel, energy, money, cargo, repairs, and roadside risk across a 66-space route.
 
-Overview of the game and goal：
+The fastest vehicle is not automatically the best. Moving aggressively increases exposure to tickets, tire failures, towing, and resource shortages, while conservative players can work, trade collectibles, rest, and upgrade their vehicles for a safer late game.
 
+## Gameplay features
 
-There will be four players. Each player chooses a vehicle (sedan, RV, pickup, and sports car) and races from Chicago to Los Angeles. Whoever first reached Santa Monica wins the game.
-Setup:
+- **Five asymmetric vehicles:** Sedan, RV, Pickup, Sports Car, and Motorcycle each trade off speed, range, capacity, and resilience.
+- **Resource planning:** manage fuel, energy, cash, spare tires, gas cans, coffee, and cargo.
+- **A changing route:** gas stations, motels, mechanics, and casinos are randomized between fixed cities and river crossings.
+- **Risk and recovery:** speeding tickets, tire failures, towing, debt, and forced rest can reshape the race.
+- **Local economy:** work in major cities, gamble, or carry collectibles west and sell them for distance-based profit.
+- **Human and autonomous drivers:** select any vehicles for human control; the rest are driven by rule-based agents.
+- **History export:** the game records decisions and events for replay and balance analysis.
 
+## Quick start
 
-At the beginning, each player chooses a type of vehicle, and will be given 300 dollars. They will use that money to put on gas, book motels, deal with emergencies, or upgrade their vehicles. Each player also has energy points 3, with fuel = full, tire = 1 (but capacity - 1). In case the money runs out, players can choose to either work at big cities by sacrificing turns, buy collectibles in a city and sell them to another city, or gamble at casinos. 
-Different types of cars :
+### Requirements
 
+- Python 3.10+
+- Pygame
 
-Sedan. Speed = 1, capacity = 3, fuel tank = 5, fuel cons: 1, energy = 3. Specialist: None.
+```bash
+git clone https://github.com/patrick528300/Route66game.git
+cd Route66game
+python3 -m pip install pygame
+python3 route66game.py
+```
 
+On the opening screen, select one or more human-controlled vehicles. Unselected vehicles become AI drivers.
 
-RV. Speed = 1 (maximum move per turn = 5) , capacity = 4, fuel tank = 20, fuel cons: 4. Energy = 3. Specialist: energy restores to 3 when sleeping at roadside. 
+### Controls
 
+- Click a vehicle card to toggle human control.
+- Press **Space** or click **Roll** to begin a human turn.
+- Click a highlighted road cell to choose a destination.
+- Use the service panel for fuel, lodging, repairs, purchases, work, upgrades, or gambling.
+- Press **H** to view history and **N** to start a new game.
+- Press **Esc** to close a popup or exit.
 
-Pickup. Speed = 1, capacity = 5, fuel tank = 15, fuel cons: 3, energy = 3. Specialist: bigger capacity. 
+## The strategic loop
 
+1. Roll for movement range and choose how far to travel.
+2. Spend fuel and energy while evaluating the next reliable service stop.
+3. Decide whether to push forward, detour, rest, work, trade, or upgrade.
+4. Recover from tickets, breakdowns, river delays, debt, and resource shortages.
+5. Reach space 66 — Santa Monica — before the other drivers.
 
-Sports car. Speed = 2 (maximum move per turn = 10), capacity = 2, fuel tank = 5, fuel cons: 2, energy = 3. Specialist: moving fast. 
+## Vehicle trade-offs
 
-Motorcycle. Speed =2 (maximum move per turn = 6), capacity = 1, fuel tank = 2, fuel cons: 1, energy = 3. Specialist: can still move when no gas / flat tire. 
+| Vehicle | Strength | Main constraint |
+| --- | --- | --- |
+| Sedan | Balanced and economical | No special ability |
+| RV | Large tank; restores energy when sleeping roadside | High fuel consumption |
+| Pickup | Highest cargo capacity | High fuel consumption |
+| Sports Car | Fastest road movement | Small tank and cargo capacity |
+| Motorcycle | Can crawl forward without fuel or with a flat tire | Very small tank and capacity |
 
+## Engineering highlights
 
-Different places: 
+- Encapsulates vehicle state with a Python data class and centralizes rule enforcement in `Route66Board`.
+- Models fixed cities and river crossings alongside procedurally placed service points.
+- Handles dependent state transitions for movement, fuel use, fatigue, debt, towing, repair, upgrades, cargo, and random hazards.
+- Keeps autonomous-driver decisions in a separate `Route66AI` module while exposing the same legal board actions used by human players.
+- Uses compact state keys and observed rewards to retain decision values during a run, combined with explicit survival-risk estimates.
+- Exports a human-readable event history for debugging and playtest review.
 
-Big cities (Chicago, St. Louis, Oklahoma City, Armarillo, Santa Fe, Flagstaff, Barstow, Pasadena), where you can have all services: put on gas, motel / sleeping, repair / upgrade car, buy tire / arm / gas can / coffee, buy or sell collectibles. Players can work to earn money – each turn players earn $50. Big cities do not have casinos. 
+## Project structure
 
-Gas Station - put on gas, buy gas can, buy coffee. 
+| File | Purpose |
+| --- | --- |
+| `route66game.py` | Pygame UI, vehicle model, board state, and game rules |
+| `route66_ai.py` | Autonomous driver, survival-risk evaluation, and action selection |
+| `route66_points.json` | Route and display point data |
+| `route66gamerule.txt` | Detailed rules reference |
+| `route66_history.txt` | Example exported play history |
 
-Mechanics - repair / upgrade car, buy tires. Repair flat tires.
+## Design and development
 
-Motel - sleeping, so the player can restore energy to 3. 
+I originally designed Route 66 as a tabletop-style road-trip game, including the vehicle classes, route economy, service distribution, emergencies, and balancing. I later directed its translation into a playable software system, specifying executable behavior, testing edge cases, and iterating on game balance.
 
-Casino - win or lose money. Put 50 dollars in, and roll a dice. If dice > 4, win 200 dollars, otherwise lose $50. 
+The project is intentionally presented as a game and simulation engineering project—not as an AI product. Its strongest technical problem is maintaining consistent behavior while many resources and recovery rules interact during the same turn.
 
-River Crossing - East St. Louis (Mississippi River Crossing), Needles (Colorado River Crossing). Roll a dice and if the result is odd, then the vehicle can cross the river and move, otherwise the vehicle has to wait, but gas and energy freeze while waiting. 
+## Roadmap
 
-Destination - Santa Monica
-
-Placing services on the map: gas stations, mechanics, motels, and casinos will be randomly placed on blocks other than big cities or river crossings, and on the same block, there can be more than 1 service. Amount: gas station 10, motel 6, mechanic 5, casino 5
-
-Resources: 
-
-Gas. spend fuel every turn to roll a dice so the vehicle moves
-
-Tires. Used when a tire blows off. Otherwise the vehicle will be towed to nearest mechanics (and the mechanics cannot be the other side of Mississippi River or Colorado River) 、
-
-Coffee. Used when energy = 0. Ignore energy = 0 for 1 turn (can still move). Must rest before drinking coffee again. 
-
-Collectible. Buy in a city, deliver it to other cities and sell it for profit. 
-
-
-Running the game
-
-Roll a dice and multiply the dice result by speed, clipped by the maximum move, then the player knows the range they’re able to move in this turn. Then players can move vehicles to any block within the range forward or backward. 
-
-In every turn the energy will be reduced by 1. Players have to stay in a motel to restore the energy to be 3. 
-
-In each turn fuel is dropped by the fuel comp. If the fuel tank < fuel, then the vehicle cannot move. The vehicle will be towed to the nearest gas station (not including the ones on the other bank of Mississippi River or Colorado River).  Players have to stop by at gas stations to put on gas. If the vehicles have gas cans, consume the gas can and each gas can provides 2 fuel, so the vehicle can move again. Motorcycle player can still move +1 when fuel = 0, with energy - 1 per turn. Mobility can resume when motorcycle gets gas. 
-
-
-If the energy is dropped to 0, players can drink coffee to continue looking for a motel. If players do not have coffee, or they have consumed coffee, then they had to stop moving for 1 round (so they could sleep), and energy would be raised to 1. RV gets energy +3 if RV sleeps on the road. Whenever a player stops at a casino, the energy becomes 2. 
-
-
-If the players actually move >= 5 blocks, toss a dice. If the result is 1 or 2, then the player gets a ticket of $100 that must be paid next turn before moving the vehicle. If the result is 3 or 4, a tire blows off and a spare tire should be consumed; otherwise the vehicle will be towed to the nearest mechanic (not including the ones on the other bank of Mississippi River or Colorado River) (ticket is $100, and towing is $50). If the player gets a flat tire, repair that at the mechanic where it is towed to. The repair fee is 2x the tire price at the mechanic. Motorcycle player can still move +1 when fuel = 0, with energy - 1, gas unchanged per turn. Mobility can resume when vehicle gets tire replaced. 
-
-
-If a player gets debts (money < 0), they can still move or spend money if they are not in a big city, but they cannot pass through nearby big cities. They have to work long enough to get their money > 0, otherwise they cannot leave the big city or spend money any more. Players earn $50 each turn when they stay to work in a city. 
-
-
-Players can choose to stay in a town to work. Each turn they stay in a big city, they can earn 50 dollars. 
-
-Things that take a turn:
-
-Move
-
-Car under upgraded / repair
-
-Work 
-
-Sleep at roadside
-
-Things that can be done after moving and do not take a turn:
-
-Buy stuff (coffee, …)
-
-Stay at a motel
-
-Put on gas
-
-Gamble (at a casino) 
-
-
-Upgrade Car: go to a mechanic, spend money, and wait to be repaired
-
-Capacity + 2. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
-
-Fuel tank + 3. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
-
-Speed + 1. Waiting time: 2 turns. Bill: $100, Consequence: fuel consumption +1
-
-Collectible. Buy in a city, deliver it to other cities and sell it for profit. 
-
-
-Running the game
-
-Roll a dice and multiply the dice result by speed, clipped by the maximum move, then the player knows the range they’re able to move in this turn. Then players can move vehicles to any block within the range forward or backward. 
-
-In every turn the energy will be reduced by 1. Players have to stay in a motel to restore the energy to be 3. 
-
-In each turn fuel is dropped by the fuel comp. If the fuel tank < fuel, then the vehicle cannot move. The vehicle will be towed to the nearest gas station (not including the ones on the other bank of Mississippi River or Colorado River).  Players have to stop by at gas stations to put on gas. If the vehicles have gas cans, consume the gas can and each gas can provides 2 fuel, so the vehicle can move again. Motorcycle player can still move when fuel = 0. Mobility can resume when motorcycle gets gas. 
-
-
-If the energy is dropped to 0, players can drink coffee to continue looking for a motel. If players do not have coffee, or they have consumed coffee, then they had to stop moving for 1 round (so they could sleep), and energy would be raised to 1. RV gets energy +2 if RV sleeps on the road. Whenever a player stops at a casino, the energy becomes 2. 
-
-
-If the players actually move >= 5 blocks, toss a dice. If the result is 1 or 2, then the player gets a ticket of $100 that must be paid next turn before moving the vehicle. If the result is 3 or 4, a tire blows off and a spare tire should be consumed; otherwise the vehicle will be towed to the nearest mechanic (not including the ones on the other bank of Mississippi River or Colorado River) (ticket is $100, and towing is $50). If the player gets a flat tire, repair that at the mechanic where it is towed to. The repair fee is 2x the tire price at the mechanic. 
-
-
-If a player gets debts (money < 0), they can still move or spend money if they are not in a big city, but they cannot pass through nearby big cities. They have to work long enough to get their money > 0, otherwise they cannot leave the big city or spend money any more. Players earn $50 each turn when they stay to work in a city. 
-
-
-Players can choose to stay in a town to work. Each turn they stay in a big city, they can earn 50 dollars. 
-
-Things that take a turn:
-
-Move
-
-Car under upgraded / repair
-
-Work 
-
-Sleep at roadside
-
-Things that can be done after moving and do not take a turn:
-
-Buy stuff (coffee, …)
-
-Stay at a motel
-
-Put on gas
-
-Gamble (at a casino) 
-
-
-Upgrade Car: go to a mechanic, spend money, and wait to be repaired
-
-Capacity + 2. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
-
-Fuel tank + 3. Waiting time: 1 turn. Bill: $50. Consequence: fuel consumption + 1
-
-Speed + 1. Waiting time: 2 turns. Bill: $100, Consequence: fuel consumption +1
-
+- Separate the game engine from Pygame rendering
+- Add deterministic random seeds and save/load support
+- Add automated tests for towing, debt, emergencies, and service placement
+- Add a short tutorial and clearer in-game rule explanations
+- Collect playtest statistics to compare vehicle balance and agent behavior
